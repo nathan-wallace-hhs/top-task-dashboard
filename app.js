@@ -321,15 +321,6 @@ function renderOverviewPage() {
 }
 
 
-function escapeXml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
-
 function classifyCounts(tasks) {
   return tasks.reduce((acc, task) => {
     const key = task.classification || 'unknown';
@@ -338,98 +329,37 @@ function classifyCounts(tasks) {
   }, {});
 }
 
-function buildSpreadsheetXml(reportSummaries, taskRows) {
-  const summaryHeader = [
+function toCsvCell(value) {
+  const safe = String(value ?? '');
+  return `"${safe.replace(/"/g, '""')}"`;
+}
+
+function buildPortfolioCsv() {
+  const summaries = reports.map(summarizeReport)
+    .sort((a, b) => b.avgScore - a.avgScore);
+  const summaryByFile = new Map(summaries.map((summary) => [summary.file, summary]));
+
+  const csvHeader = [
     'Report',
     'Report File',
     'Status',
-    'URL',
+    'Report URL',
     'Audience',
     'Scope',
     'Analyzed At',
-    'Total Tasks',
-    'Average Score',
-    'Top Tasks',
-    'Secondary Tasks',
-    'Tiny Tasks',
-    'Unknown Tasks'
-  ];
-
-  const taskHeader = [
-    'Report',
-    'Report File',
-    'Status',
+    'Total Tasks (Report)',
+    'Average Score (Report)',
+    'Top Tasks (Report)',
+    'Secondary Tasks (Report)',
+    'Tiny Tasks (Report)',
+    'Unknown Tasks (Report)',
     'Task Rank in Report',
     'Task ID',
     'Task Statement',
     'Classification',
     'Composite Score',
-    'Rationale',
-    'Report URL',
-    'Audience',
-    'Scope',
-    'Analyzed At'
+    'Rationale'
   ];
-
-  const makeCell = (value, type = 'String') => `<Cell><Data ss:Type="${type}">${escapeXml(value)}</Data></Cell>`;
-  const makeRow = (cells) => `<Row>${cells.join('')}</Row>`;
-
-  const summaryRows = reportSummaries.map((summary) => makeRow([
-    makeCell(summary.title),
-    makeCell(summary.file),
-    makeCell(reportStatus(summary)),
-    makeCell(summary.data.meta?.url || 'n/a'),
-    makeCell(summary.data.meta?.audience || 'n/a'),
-    makeCell(summary.data.meta?.scope || 'n/a'),
-    makeCell(summary.data.meta?.analyzed_at || 'n/a'),
-    makeCell(summary.totalTasks, 'Number'),
-    makeCell(Number(summary.avgScore.toFixed(4)), 'Number'),
-    makeCell(summary.topTasks, 'Number'),
-    makeCell(summary.secondaryTasks, 'Number'),
-    makeCell(summary.tinyTasks, 'Number'),
-    makeCell(summary.unknownTasks, 'Number')
-  ])).join('');
-
-  const detailRows = taskRows.map((task) => makeRow([
-    makeCell(task.reportTitle),
-    makeCell(task.reportFile),
-    makeCell(task.reportStatus),
-    makeCell(task.rank, 'Number'),
-    makeCell(task.id),
-    makeCell(task.taskStatement),
-    makeCell(task.classification),
-    makeCell(Number(task.compositeScore.toFixed(4)), 'Number'),
-    makeCell(task.rationale),
-    makeCell(task.url),
-    makeCell(task.audience),
-    makeCell(task.scope),
-    makeCell(task.analyzedAt)
-  ])).join('');
-
-  return `<?xml version="1.0"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:o="urn:schemas-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-com:office:excel"
- xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
-  <Worksheet ss:Name="Report Summary">
-    <Table>
-      ${makeRow(summaryHeader.map((header) => makeCell(header)))}
-      ${summaryRows}
-    </Table>
-  </Worksheet>
-  <Worksheet ss:Name="Task Inventory">
-    <Table>
-      ${makeRow(taskHeader.map((header) => makeCell(header)))}
-      ${detailRows}
-    </Table>
-  </Worksheet>
-</Workbook>`;
-}
-
-function buildPortfolioSpreadsheet() {
-  const summaries = reports.map(summarizeReport)
-    .sort((a, b) => b.avgScore - a.avgScore);
 
   const taskRows = summaries.flatMap((summary) => {
     const sortedTasks = [...(summary.data.task_longlist || [])].sort((a, b) => b.composite_score - a.composite_score);
@@ -450,7 +380,32 @@ function buildPortfolioSpreadsheet() {
     }));
   });
 
-  return buildSpreadsheetXml(summaries, taskRows);
+  const csvRows = [
+    csvHeader.map(toCsvCell).join(','),
+    ...taskRows.map((task) => [
+      task.reportTitle,
+      task.reportFile,
+      task.reportStatus,
+      task.url,
+      task.audience,
+      task.scope,
+      task.analyzedAt,
+      summaryByFile.get(task.reportFile)?.totalTasks ?? 0,
+      round(summaryByFile.get(task.reportFile)?.avgScore ?? 0),
+      summaryByFile.get(task.reportFile)?.topTasks ?? 0,
+      summaryByFile.get(task.reportFile)?.secondaryTasks ?? 0,
+      summaryByFile.get(task.reportFile)?.tinyTasks ?? 0,
+      summaryByFile.get(task.reportFile)?.unknownTasks ?? 0,
+      task.rank,
+      task.id,
+      task.taskStatement,
+      task.classification,
+      task.compositeScore.toFixed(2),
+      task.rationale
+    ].map(toCsvCell).join(','))
+  ];
+
+  return `\uFEFF${csvRows.join('\n')}`;
 }
 
 function toMarkdown(report) {
@@ -521,10 +476,10 @@ if (downloadSpreadsheetButton) {
   downloadSpreadsheetButton.addEventListener('click', () => {
     if (!reports.length) return;
     const today = new Date().toISOString().slice(0, 10);
-    const blob = new Blob([buildPortfolioSpreadsheet()], { type: 'application/xml;charset=utf-8' });
+    const blob = new Blob([buildPortfolioCsv()], { type: 'text/csv;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `top-task-portfolio-${today}.xml`;
+    link.download = `top-task-portfolio-${today}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
   });
