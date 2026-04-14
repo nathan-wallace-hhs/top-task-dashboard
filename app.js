@@ -14,6 +14,8 @@ const overviewTableBody = document.querySelector('#overview-table-body');
 let reports = [];
 let selectedReport = null;
 
+const reportsBase = document.body?.dataset?.reportsBase || './reports';
+
 const titleFromFile = (name) => name.replace('.json', '').replace(/[-_]/g, ' ');
 const round = (value) => Number.isFinite(value) ? value.toFixed(2) : '0.00';
 const reportStatus = (report) => report?.data?.meta?.report_status || 'Unreviewed';
@@ -204,10 +206,10 @@ async function copyPromptToClipboard() {
 }
 
 async function loadReports() {
-  const response = await fetch('./reports/index.json');
+  const response = await fetch(`${reportsBase}/index.json`);
   const files = await response.json();
   reports = await Promise.all(files.map(async (file) => {
-    const data = await fetch(`./reports/${file}`).then((r) => r.json());
+    const data = await fetch(`${reportsBase}/${file}`).then((r) => r.json());
     return { file, title: titleFromFile(file), data };
   }));
 
@@ -375,7 +377,7 @@ function renderOverviewPage() {
     .sort((a, b) => b.avgScore - a.avgScore)
     .map((report) => `
       <tr>
-        <td><a href="./index.html">${report.title}</a></td>
+        <td><a href="./reports/">${report.title}</a></td>
         <td>${reportStatus(report)}</td>
         <td>${report.data.meta?.audience || 'n/a'}</td>
         <td>${report.totalTasks}</td>

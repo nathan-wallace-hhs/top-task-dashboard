@@ -3,46 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Top Task Dashboard</title>
+    <title>All Reports Overview | Top Task Dashboard</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-reports-base="./reports">
     <header class="site-header">
       <div class="brand">
         <h1>Top Task Dashboard</h1>
-        <p>Explore top-task analysis reports stored as JSON files.</p>
+        <p>High-level overview of every available report.</p>
       </div>
       <nav class="site-nav" aria-label="Main">
-        <a class="active" href="./index.html">Report Explorer</a>
-        <a href="./overview.html">All Reports Overview</a>
+        <a href="./reports/">Report Explorer</a>
+        <a class="active" href="./index.html">All Reports Overview</a>
         <a href="./prompt.html">Prompt Builder</a>
       </nav>
     </header>
 
-    <main class="layout">
-      <aside class="panel">
-        <h2>Reports</h2>
-        <input id="report-search" type="search" placeholder="Search reports" />
-        <ul id="report-list"></ul>
-      </aside>
-
-      <section class="panel content">
-        <div class="toolbar">
-          <label>
-            Classification
-            <select id="classification-filter">
-              <option value="all">All</option>
-              <option value="top">Top</option>
-              <option value="secondary">Secondary</option>
-              <option value="tiny">Tiny</option>
-            </select>
-          </label>
-          <button id="download-md" type="button">Download Markdown</button>
+    <main class="overview-layout">
+      <section class="panel">
+        <div class="overview-toolbar">
+          <h2>Portfolio Summary</h2>
+          <p id="overview-count" class="subtle"></p>
         </div>
+        <div id="overview-stats" class="stat-grid"></div>
+      </section>
 
-        <article id="report-view" aria-live="polite">
-          <p>Select a report to begin.</p>
-        </article>
+      <section class="panel">
+        <h2>Reports at a Glance</h2>
+        <div class="table-wrap">
+          <table class="task-table">
+            <thead>
+              <tr>
+                <th>Report</th>
+                <th>Status</th>
+                <th>Audience</th>
+                <th>Total Tasks</th>
+                <th>Avg Score</th>
+                <th>Top Tasks</th>
+                <th>Secondary</th>
+                <th>Tiny</th>
+              </tr>
+            </thead>
+            <tbody id="overview-table-body"></tbody>
+          </table>
+        </div>
       </section>
     </main>
 
