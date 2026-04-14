@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Builder | Top Task Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <h1>Top Task Dashboard</h1>
+        <p>Build a standardized federal page audit prompt.</p>
+      </div>
+      <nav class="site-nav" aria-label="Main">
+        <a href="./index.html">Report Explorer</a>
+        <a href="./overview.html">All Reports Overview</a>
+        <a class="active" href="./prompt.html">Prompt Builder</a>
+      </nav>
+    </header>
+
+    <main class="overview-layout">
+      <section class="panel prompt-builder" aria-labelledby="prompt-builder-heading">
+        <h2 id="prompt-builder-heading">Prompt Builder</h2>
+        <p>Fill in the inputs, then copy the complete audit prompt.</p>
+        <form id="prompt-form" class="prompt-form">
+          <label>
+            Page URL
+            <input id="prompt-url" name="page_url" type="url" placeholder="https://agency.gov/page" />
+          </label>
+          <label>
+            Page Title / Purpose
+            <input id="prompt-title-purpose" name="page_title_and_stated_purpose" type="text" placeholder="Benefits Eligibility page for veterans" />
+          </label>
+          <label>
+            Primary User Task(s)
+            <input id="prompt-user-jobs" name="top_1_to_3_user_jobs" type="text" placeholder="Check eligibility; submit application; track status" />
+          </label>
+          <label>
+            Primary Business/Agency Goal
+            <input id="prompt-outcome" name="conversion_or_outcome" type="text" placeholder="Increase completed online applications" />
+          </label>
+          <label>
+            Audit Date
+            <input id="prompt-date" name="date" type="text" placeholder="YYYY-MM-DD" />
+          </label>
+          <label>
+            Reviewer
+            <input id="prompt-reviewer" name="reviewer" type="text" placeholder="Analyst name" />
+          </label>
+          <label>
+            Audit Number (##)
+            <input id="prompt-audit-number" name="audit_number" type="text" placeholder="01" />
+          </label>
+          <div class="prompt-actions">
+            <button id="copy-prompt" type="button">Copy Prompt</button>
+            <span id="copy-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+        <label class="prompt-output-label" for="prompt-output">Generated prompt</label>
+        <textarea id="prompt-output" rows="24" readonly></textarea>
+      </section>
+    </main>
+
+    <footer>
+      <small>Static build for GitHub Pages / nojekyll.</small>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
