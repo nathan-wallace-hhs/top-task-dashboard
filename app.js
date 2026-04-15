@@ -245,16 +245,33 @@ function renderReport() {
   reportView.innerHTML = `
     <h2>${selectedReport.title}</h2>
     <p>${data.summary || 'No summary available for this report.'}</p>
-    <div class="meta-grid">
-      <div class="card"><strong>URL</strong><br><a href="${data.meta.url}" target="_blank" rel="noreferrer">${data.meta.url}</a></div>
-      <div class="card"><strong>Audience</strong><br>${data.meta.audience || 'n/a'}</div>
-      <div class="card"><strong>Scope</strong><br>${data.meta.scope || 'n/a'}</div>
-      <div class="card"><strong>Analyzed</strong><br>${data.meta.analyzed_at || 'n/a'}</div>
-      <div class="card"><strong>Status</strong><br>${reportStatus(selectedReport)}</div>
+    <div class="report-meta-card card">
+      <dl class="report-meta-list">
+        <div class="report-meta-item">
+          <dt>URL</dt>
+          <dd><a href="${data.meta.url}" target="_blank" rel="noreferrer">${data.meta.url}</a></dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Audience</dt>
+          <dd>${data.meta.audience || 'n/a'}</dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Scope</dt>
+          <dd>${data.meta.scope || 'n/a'}</dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Analyzed</dt>
+          <dd>${data.meta.analyzed_at || 'n/a'}</dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Status</dt>
+          <dd>${reportStatus(selectedReport)}</dd>
+        </div>
+      </dl>
     </div>
 
     <h3>Score overview</h3>
-    <div class="meta-grid">${bars}</div>
+    <div class="stat-grid">${bars}</div>
 
     <div class="tasks-header">
       <h3>Tasks (${tasks.length}${filter === 'all' ? '' : ` filtered: ${filter}`})</h3>
@@ -355,6 +372,161 @@ function toCsvCell(value) {
 function toJoinedList(items) {
   if (!Array.isArray(items) || !items.length) return '';
   return items.join(' | ');
+}
+
+function toWorkbookCell(value) {
+  const safe = String(value ?? '');
+  return safe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function toWorkbookRow(cells) {
+  return `<Row>${cells.map((cell) => `<Cell><Data ss:Type="String">${toWorkbookCell(cell)}</Data></Cell>`).join('')}</Row>`;
+}
+
+function buildSingleReportWorkbook(report) {
+  const { data, title } = report;
+  const meta = data.meta || {};
+  const allTasks = [...(data.task_longlist || [])].sort((a, b) => b.composite_score - a.composite_score);
+  const topTasks = allTasks.filter((task) => task.classification === 'top');
+  const nowIso = new Date().toISOString();
+
+  const toolExplanationRows = [
+    ['Top Task Dashboard Report Workbook'],
+    [''],
+    ['Purpose', 'Provide a professional export of one report for stakeholders and archival.'],
+    ['Report', title],
+    ['Source JSON', report.file],
+    ['Generated At (UTC)', nowIso],
+    [''],
+    ['What this workbook contains'],
+    ['Sheet 1: Tool Explanation', 'Overview of the export and intended use.'],
+    ['Sheet 2: Prompt & Methodology', 'Prompt framing, research method, and scoring model used.'],
+    ['Sheet 3: Test Metadata', 'Report metadata, confidence, evidence gaps, and aggregate counts.'],
+    ['Sheet 4: Top Tasks', 'Ranked top-classified tasks with scores, evidence, and rationale.']
+  ];
+
+  const promptMethodologyRows = [
+    ['Prompt & Methodology'],
+    [''],
+    ['Analysis Prompt'],
+    ['Use the Top Task Research Prompt to analyze the selected URL, audience, and scope.'],
+    ['The model inventories the site, infers user intent, creates a deduplicated longlist, scores tasks, and prioritizes Top vs Tiny tasks.'],
+    [''],
+    ['Methodology Steps'],
+    ['1. Fetch and inventory navigation, CTAs, and page types.'],
+    ['2. Infer user intents from observed on-site evidence.'],
+    ['3. Generate a task longlist in user voice.'],
+    ['4. Deduplicate overlapping tasks and normalize wording.'],
+    ['5. Score each task: Frequency, Impact, Findability, Completability (1-5).'],
+    ['6. Rank and classify tasks as top, secondary, or tiny.'],
+    ['7. Recommend a user voting survey for validation.'],
+    [''],
+    ['Scoring Notes'],
+    ['Composite score reflects the combined scoring dimensions and supports rank ordering.'],
+    ['Evidence gaps should reduce confidence and be validated through additional research.']
+  ];
+
+  const byClass = classifyCounts(allTasks);
+  const testMetadataRows = [
+    ['Test Metadata'],
+    [''],
+    ['Report Status', reportStatus(report)],
+    ['URL', meta.url || 'n/a'],
+    ['Audience', meta.audience || 'n/a'],
+    ['Scope', meta.scope || 'n/a'],
+    ['Analyzed At', meta.analyzed_at || 'n/a'],
+    ['Analyst Confidence', meta.analyst_confidence || 'n/a'],
+    ['Evidence Gaps', toJoinedList(meta.evidence_gaps) || 'None noted'],
+    ['Summary', data.summary || ''],
+    [''],
+    ['Total Tasks', String(allTasks.length)],
+    ['Top Tasks', String(byClass.top || 0)],
+    ['Secondary Tasks', String(byClass.secondary || 0)],
+    ['Tiny Tasks', String(byClass.tiny || 0)],
+    ['Unknown Tasks', String(byClass.unknown || 0)],
+    ['Recommended Survey Instructions', data.recommended_survey?.instructions || ''],
+    ['Recommended Survey Sample Size', data.recommended_survey?.recommended_sample_size ?? ''],
+    ['Recommended Survey Target Segments', toJoinedList(data.recommended_survey?.target_segments) || '']
+  ];
+
+  const topTaskHeader = [
+    'Rank',
+    'Task ID',
+    'Task Statement',
+    'User Intent Category',
+    'Classification',
+    'Composite Score',
+    'Frequency',
+    'Impact',
+    'Findability',
+    'Completability',
+    'Evidence Source URLs',
+    'Evidence Details (JSON)',
+    'Rationale'
+  ];
+  const topTaskRows = topTasks.length
+    ? topTasks.map((task, index) => [
+      String(index + 1),
+      task.id || 'n/a',
+      task.task_statement || 'n/a',
+      task.user_intent_category || '',
+      task.classification || 'top',
+      Number.isFinite(task.composite_score) ? task.composite_score.toFixed(2) : '',
+      task.scores?.frequency ?? '',
+      task.scores?.impact ?? '',
+      task.scores?.findability ?? '',
+      task.scores?.completability ?? '',
+      toJoinedList((task.evidence || []).map((item) => item.source_url).filter(Boolean)),
+      task.evidence?.length ? JSON.stringify(task.evidence) : '',
+      task.rationale || ''
+    ])
+    : [['', '', 'No tasks are currently classified as top.', '', '', '', '', '', '', '', '', '', '']];
+
+  return `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Header">
+   <Font ss:Bold="1"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Tool Explanation">
+  <Table>
+   ${toolExplanationRows.map((row, index) => (index === 0
+    ? `<Row><Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(row[0])}</Data></Cell></Row>`
+    : toWorkbookRow(row))).join('')}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Prompt &amp; Methodology">
+  <Table>
+   ${promptMethodologyRows.map((row, index) => (index === 0
+    ? `<Row><Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(row[0])}</Data></Cell></Row>`
+    : toWorkbookRow(row))).join('')}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Test Metadata">
+  <Table>
+   ${testMetadataRows.map((row, index) => (index === 0
+    ? `<Row><Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(row[0])}</Data></Cell></Row>`
+    : toWorkbookRow(row))).join('')}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Top Tasks">
+  <Table>
+   <Row>${topTaskHeader.map((header) => `<Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(header)}</Data></Cell>`).join('')}</Row>
+   ${topTaskRows.map((row) => toWorkbookRow(row)).join('')}
+  </Table>
+ </Worksheet>
+</Workbook>`;
 }
 
 function buildPortfolioCsv() {
