@@ -1,7 +1,7 @@
 const reportList = document.querySelector('#report-list');
 const reportSearch = document.querySelector('#report-search');
 const reportView = document.querySelector('#report-view');
-const downloadButton = document.querySelector('#download-md');
+const downloadButton = document.querySelector('#download-pdf');
 const downloadSpreadsheetButton = document.querySelector('#download-spreadsheet');
 const promptForm = document.querySelector('#prompt-form');
 const promptOutput = document.querySelector('#prompt-output');
@@ -509,41 +509,206 @@ function buildPortfolioCsv() {
   return `\uFEFF${csvRows.join('\n')}`;
 }
 
-function toMarkdown(report) {
+function formatTimestamp(value) {
+  if (!value) return 'n/a';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return parsed.toLocaleString();
+}
+
+function escapePdfText(value) {
+  return String(value ?? '')
+    .replace(/\\/g, '\\\\')
+    .replace(/\(/g, '\\(')
+    .replace(/\)/g, '\\)');
+}
+
+function wrapText(value, maxChars = 100) {
+  const words = String(value ?? '').split(/\s+/).filter(Boolean);
+  if (!words.length) return [''];
+
+  const lines = [];
+  let current = words[0];
+  for (let index = 1; index < words.length; index += 1) {
+    const next = `${current} ${words[index]}`;
+    if (next.length > maxChars) {
+      lines.push(current);
+      current = words[index];
+    } else {
+      current = next;
+    }
+  }
+  lines.push(current);
+  return lines;
+}
+
+function collectReportPdfLines(report) {
   const { file, data } = report;
+  const tasks = [...(data.task_longlist || [])].sort((a, b) => b.composite_score - a.composite_score);
+  const byClass = classifyCounts(tasks);
+  const averageScore = tasks.length
+    ? tasks.reduce((sum, task) => sum + (task.composite_score || 0), 0) / tasks.length
+    : 0;
   const lines = [
-    `# Top Task Report: ${titleFromFile(file)}`,
-    '',
-    `- URL: ${data.meta?.url || 'n/a'}`,
-    `- Audience: ${data.meta?.audience || 'n/a'}`,
-    `- Report status: ${data.meta?.report_status || 'Unreviewed'}`,
-    `- Scope: ${data.meta?.scope || 'n/a'}`,
-    `- Analyzed at: ${data.meta?.analyzed_at || 'n/a'}`,
-    '',
-    '## Tasks',
-    '',
-    '| ID | Task | Classification | Composite Score |',
-    '|---|---|---|---|',
-    ...(data.task_longlist || []).map((task) =>
-      `| ${task.id} | ${task.task_statement} | ${task.classification} | ${round(task.composite_score)} |`),
-    '',
-    '## Next steps',
-    '',
-    ...(data.next_steps || []).map((step) => `- ${step}`)
+    { type: 'title', text: `Top Task Research Report — ${titleFromFile(file)}` },
+    { type: 'body', text: `Report file: ${file}` },
+    { type: 'body', text: `Generated at: ${formatTimestamp(new Date().toISOString())}` },
+    { type: 'spacer', text: '' },
+    { type: 'heading', text: 'Report Metadata' },
+    { type: 'body', text: `Status: ${data.meta?.report_status || 'Unreviewed'}` },
+    { type: 'body', text: `URL: ${data.meta?.url || 'n/a'}` },
+    { type: 'body', text: `Audience: ${data.meta?.audience || 'n/a'}` },
+    { type: 'body', text: `Scope: ${data.meta?.scope || 'n/a'}` },
+    { type: 'body', text: `Analyzed At: ${formatTimestamp(data.meta?.analyzed_at)}` },
+    { type: 'body', text: `Analyst Confidence: ${data.meta?.analyst_confidence || 'n/a'}` },
+    { type: 'body', text: `Evidence Gaps: ${(data.meta?.evidence_gaps || []).join('; ') || 'None listed'}` },
+    { type: 'spacer', text: '' },
+    { type: 'heading', text: 'Executive Summary' },
+    ...wrapText(data.summary || 'No summary available.', 120).map((text) => ({ type: 'body', text })),
+    { type: 'spacer', text: '' },
+    { type: 'heading', text: 'Portfolio Metrics' },
+    { type: 'body', text: `Total Tasks: ${tasks.length}` },
+    { type: 'body', text: `Average Composite Score: ${round(averageScore)}` },
+    { type: 'body', text: `Top: ${byClass.top || 0} | Secondary: ${byClass.secondary || 0} | Tiny: ${byClass.tiny || 0} | Unknown: ${byClass.unknown || 0}` },
+    { type: 'body', text: `Top Task IDs: ${(data.top_tasks || []).join(', ') || 'n/a'}` },
+    { type: 'body', text: `Tiny Task IDs: ${(data.tiny_tasks || []).join(', ') || 'n/a'}` },
+    { type: 'spacer', text: '' },
+    { type: 'heading', text: 'Recommended Validation Survey' },
+    ...wrapText(`Instructions: ${data.recommended_survey?.instructions || 'n/a'}`, 120).map((text) => ({ type: 'body', text })),
+    ...wrapText(`Task List for Voting: ${(data.recommended_survey?.task_list_for_voting || []).join(', ') || 'n/a'}`, 120).map((text) => ({ type: 'body', text })),
+    { type: 'body', text: `Recommended Sample Size: ${data.recommended_survey?.recommended_sample_size ?? 'n/a'}` },
+    ...wrapText(`Target Segments: ${(data.recommended_survey?.target_segments || []).join(', ') || 'n/a'}`, 120).map((text) => ({ type: 'body', text })),
+    { type: 'spacer', text: '' },
+    { type: 'heading', text: 'Next Steps' },
+    ...((data.next_steps || []).length
+      ? data.next_steps.flatMap((step, index) =>
+        wrapText(`${index + 1}. ${step}`, 120).map((text) => ({ type: 'body', text })))
+      : [{ type: 'body', text: 'No next steps provided.' }]),
+    { type: 'spacer', text: '' },
+    { type: 'heading', text: 'Detailed Task Register' }
   ];
 
-  return lines.join('\n');
+  if (!tasks.length) {
+    lines.push({ type: 'body', text: 'No tasks available for this report.' });
+    return lines;
+  }
+
+  tasks.forEach((task, index) => {
+    lines.push({ type: 'heading', text: `Task ${index + 1}: ${task.id || 'n/a'} — ${task.task_statement || 'Untitled task'}` });
+    lines.push({ type: 'body', text: `Classification: ${task.classification || 'unknown'} | Intent: ${task.user_intent_category || 'n/a'}` });
+    lines.push({
+      type: 'body',
+      text: `Scores — Frequency: ${task.scores?.frequency ?? 'n/a'}, Impact: ${task.scores?.impact ?? 'n/a'}, Findability: ${task.scores?.findability ?? 'n/a'}, Completability: ${task.scores?.completability ?? 'n/a'}, Composite: ${round(task.composite_score)}`
+    });
+    wrapText(`Rationale: ${task.rationale || 'n/a'}`, 120).forEach((text) => lines.push({ type: 'body', text }));
+
+    if ((task.evidence || []).length) {
+      lines.push({ type: 'body', text: 'Evidence:' });
+      task.evidence.forEach((item, evidenceIndex) => {
+        wrapText(
+          `  ${evidenceIndex + 1}) URL: ${item.source_url || 'n/a'} | Element: ${item.element || 'n/a'} | Note: ${item.note || 'No note'}`,
+          118
+        ).forEach((text) => lines.push({ type: 'body', text }));
+      });
+    } else {
+      lines.push({ type: 'body', text: 'Evidence: none provided.' });
+    }
+    lines.push({ type: 'spacer', text: '' });
+  });
+
+  return lines;
+}
+
+function createPdfBlob(lines) {
+  const pageWidth = 612;
+  const pageHeight = 792;
+  const marginLeft = 42;
+  const marginTop = 40;
+  const marginBottom = 40;
+
+  const pages = [];
+  let pageCommands = [];
+  let y = pageHeight - marginTop;
+
+  function pushPage() {
+    if (pageCommands.length) {
+      pages.push(pageCommands.join('\n'));
+    }
+    pageCommands = [];
+    y = pageHeight - marginTop;
+  }
+
+  const style = (lineType) => {
+    if (lineType === 'title') return { fontSize: 18, leading: 24 };
+    if (lineType === 'heading') return { fontSize: 12, leading: 17 };
+    if (lineType === 'spacer') return { fontSize: 10, leading: 8 };
+    return { fontSize: 10, leading: 14 };
+  };
+
+  lines.forEach((line) => {
+    const { fontSize, leading } = style(line.type);
+    if (y - leading < marginBottom) {
+      pushPage();
+    }
+
+    if (line.type !== 'spacer') {
+      pageCommands.push(`BT /F1 ${fontSize} Tf ${marginLeft} ${y} Td (${escapePdfText(line.text)}) Tj ET`);
+    }
+    y -= leading;
+  });
+
+  pushPage();
+  if (!pages.length) pages.push('');
+
+  const objectContents = [];
+  objectContents.push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+
+  const pageObjectIds = pages.map((_, index) => 4 + index * 2);
+  const contentObjectIds = pages.map((_, index) => 5 + index * 2);
+
+  objectContents.push(`2 0 obj\n<< /Type /Pages /Kids [${pageObjectIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pages.length} >>\nendobj\n`);
+  objectContents.push('3 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n');
+
+  pages.forEach((pageStream, index) => {
+    const pageId = pageObjectIds[index];
+    const contentId = contentObjectIds[index];
+    objectContents.push(
+      `${pageId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 3 0 R >> >> /Contents ${contentId} 0 R >>\nendobj\n`
+    );
+    objectContents.push(`${contentId} 0 obj\n<< /Length ${pageStream.length} >>\nstream\n${pageStream}\nendstream\nendobj\n`);
+  });
+
+  let pdf = '%PDF-1.4\n';
+  const xrefOffsets = [0];
+  objectContents.forEach((content) => {
+    xrefOffsets.push(pdf.length);
+    pdf += content;
+  });
+
+  const xrefStart = pdf.length;
+  pdf += `xref\n0 ${xrefOffsets.length}\n`;
+  pdf += '0000000000 65535 f \n';
+  for (let i = 1; i < xrefOffsets.length; i += 1) {
+    pdf += `${String(xrefOffsets[i]).padStart(10, '0')} 00000 n \n`;
+  }
+  pdf += `trailer\n<< /Size ${xrefOffsets.length} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+
+  return new Blob([pdf], { type: 'application/pdf' });
+}
+
+function downloadPdfReport(report) {
+  const blob = createPdfBlob(collectReportPdfLines(report));
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${report.file.replace('.json', '')}-report.pdf`;
+  link.click();
+  URL.revokeObjectURL(link.href);
 }
 
 if (downloadButton) {
   downloadButton.addEventListener('click', () => {
     if (!selectedReport) return;
-    const blob = new Blob([toMarkdown(selectedReport)], { type: 'text/markdown;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${selectedReport.file.replace('.json', '')}.md`;
-    link.click();
-    URL.revokeObjectURL(link.href);
+    downloadPdfReport(selectedReport);
   });
 }
 
