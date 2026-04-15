@@ -39,7 +39,10 @@ function extractSection(label, body) {
 function normalizeJsonPayload(raw) {
   const trimmed = raw.trim();
   const fencedMatch = trimmed.match(/^```(?:json)?\n([\s\S]*?)\n```$/i);
-  return fencedMatch ? fencedMatch[1].trim() : trimmed;
+  return {
+    payload: fencedMatch ? fencedMatch[1].trim() : trimmed,
+    hadFence: Boolean(fencedMatch),
+  };
 }
 
 function deriveSlug() {
@@ -64,7 +67,7 @@ if (!jsonSection) {
   await fail('Missing "Report JSON payload" section in the issue body.');
 }
 
-const jsonPayload = normalizeJsonPayload(jsonSection);
+const { payload: jsonPayload, hadFence } = normalizeJsonPayload(jsonSection);
 let report;
 try {
   report = JSON.parse(jsonPayload);
@@ -88,4 +91,31 @@ await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
 await appendOutput('slug', slug);
 await appendOutput('report_file', reportFileName);
 await appendOutput('issue_number', String(ISSUE_NUMBER));
+await appendOutput('issue_url', `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}`);
+
+const normalizationNotes = [];
+if (hadFence) {
+  normalizationNotes.push('- Removed Markdown code fences around the JSON payload before parsing.');
+}
+if (report.slug && report.slug !== slug) {
+  normalizationNotes.push(`- Issue slug \`${slug}\` differs from payload slug \`${report.slug}\`; file path uses issue slug.`);
+}
+if (normalizationNotes.length > 0) {
+  await appendOutput('normalization_notes', normalizationNotes.join('\n'));
+}
+
+const submitterNotes = extractSection('Submitter notes', ISSUE_BODY);
+if (submitterNotes) {
+  const compact = submitterNotes
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 5)
+    .join(' ');
+  const generatedSummary = compact.length > 300 ? `${compact.slice(0, 297)}...` : compact;
+  if (generatedSummary) {
+    await appendOutput('generated_summary', generatedSummary);
+  }
+}
+
 console.log(`Wrote reports/${reportFileName}`);
