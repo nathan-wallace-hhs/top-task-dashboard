@@ -312,6 +312,7 @@ h2 {
 
 .table-wrap {
   overflow-x: auto;
+  overflow-y: visible;
   border: 1px solid #d8e3f1;
   border-radius: 10px;
 }
@@ -333,6 +334,7 @@ h2 {
 .task-table th {
   position: sticky;
   top: 0;
+  overflow: visible;
   background: #eff5fb;
   color: #16345f;
   font-size: 0.82rem;
@@ -394,7 +396,7 @@ h2 {
   visibility: hidden;
   transition: opacity 120ms ease-in-out;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1000;
 }
 
 .info-tooltip:hover + .tooltip-content,
