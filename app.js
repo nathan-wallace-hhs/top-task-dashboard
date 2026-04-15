@@ -648,57 +648,46 @@ function renderReport() {
     recommendedSurveysHeading.textContent = 'Recommended surveys';
     reportView.append(recommendedSurveysHeading);
 
-    const recommendedSurveysGrid = document.createElement('div');
-    recommendedSurveysGrid.className = 'recommended-survey-grid';
-    for (const [index, survey] of recommendedSurveys.entries()) {
-      const surveyTask = typeof survey === 'string'
-        ? survey
-        : (survey?.task_statement || survey?.task || survey?.title || '');
-      const surveyCard = document.createElement('article');
-      surveyCard.className = 'card recommended-survey-card';
+    const surveyMeta = document.createElement('dl');
+    surveyMeta.className = 'recommended-survey-meta-list';
 
-      const surveyHeader = document.createElement('div');
-      surveyHeader.className = 'recommended-survey-header';
-      const surveyBadge = document.createElement('span');
-      surveyBadge.className = 'badge recommended-survey-badge';
-      surveyBadge.textContent = `Survey task ${index + 1}`;
-      surveyHeader.append(surveyBadge);
+    const instructionsTerm = document.createElement('dt');
+    instructionsTerm.textContent = 'Instructions';
+    const instructionsDesc = document.createElement('dd');
+    instructionsDesc.textContent = surveyInstructions || 'instructions';
+    surveyMeta.append(instructionsTerm, instructionsDesc);
 
-      const surveyText = document.createElement('p');
-      surveyText.className = 'recommended-survey-task';
-      surveyText.textContent = surveyTask || `Survey item ${index + 1}`;
+    const sampleSizeTerm = document.createElement('dt');
+    sampleSizeTerm.textContent = 'Recommended sample size';
+    const sampleSizeDesc = document.createElement('dd');
+    sampleSizeDesc.textContent = String(recommendedSampleSize || 100);
+    surveyMeta.append(sampleSizeTerm, sampleSizeDesc);
 
-      const surveyMeta = document.createElement('dl');
-      surveyMeta.className = 'recommended-survey-meta';
+    const segmentsTerm = document.createElement('dt');
+    segmentsTerm.textContent = 'Target segments';
+    const segmentsDesc = document.createElement('dd');
+    segmentsDesc.textContent = targetSegments.length
+      ? targetSegments.join(', ')
+      : 'Academic researchers, IRB members, Federal staff involved in research oversight, Clinical research coordinators';
+    surveyMeta.append(segmentsTerm, segmentsDesc);
 
-      if (surveyInstructions) {
-        const instructionsTerm = document.createElement('dt');
-        instructionsTerm.textContent = 'Instructions';
-        const instructionsDesc = document.createElement('dd');
-        instructionsDesc.textContent = surveyInstructions;
-        surveyMeta.append(instructionsTerm, instructionsDesc);
+    reportView.append(surveyMeta);
+
+    if (recommendedSurveys.length) {
+      const surveyTasksList = document.createElement('ol');
+      surveyTasksList.className = 'recommended-survey-tasks';
+
+      for (const [index, survey] of recommendedSurveys.entries()) {
+        const surveyTask = typeof survey === 'string'
+          ? survey
+          : (survey?.task_statement || survey?.task || survey?.title || '');
+        const surveyTaskItem = document.createElement('li');
+        surveyTaskItem.textContent = surveyTask || `Survey task ${index + 1}`;
+        surveyTasksList.append(surveyTaskItem);
       }
 
-      if (recommendedSampleSize) {
-        const sampleSizeTerm = document.createElement('dt');
-        sampleSizeTerm.textContent = 'Recommended sample size';
-        const sampleSizeDesc = document.createElement('dd');
-        sampleSizeDesc.textContent = String(recommendedSampleSize);
-        surveyMeta.append(sampleSizeTerm, sampleSizeDesc);
-      }
-
-      if (targetSegments.length) {
-        const segmentsTerm = document.createElement('dt');
-        segmentsTerm.textContent = 'Target segments';
-        const segmentsDesc = document.createElement('dd');
-        segmentsDesc.textContent = targetSegments.join(', ');
-        surveyMeta.append(segmentsTerm, segmentsDesc);
-      }
-
-      surveyCard.append(surveyHeader, surveyText, surveyMeta);
-      recommendedSurveysGrid.append(surveyCard);
+      reportView.append(surveyTasksList);
     }
-    reportView.append(recommendedSurveysGrid);
   }
 }
 
