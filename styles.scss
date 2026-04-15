@@ -94,6 +94,12 @@ footer {
       color: #16325c;
       box-shadow: inset 0 0 0 1px rgba(0, 94, 162, 0.12);
     }
+
+    &:focus-visible {
+      outline: 3px solid $focus;
+      outline-offset: 2px;
+      border-color: #2f74b9;
+    }
   }
 }
 
@@ -146,10 +152,33 @@ footer {
   padding: 0.35rem 0.6rem;
   font-size: 0.86rem;
   font-weight: 600;
+  transition: background 120ms ease, border-color 120ms ease, transform 90ms ease, box-shadow 120ms ease;
 
   &:hover {
     background: $primary-soft;
     border-color: #7696b8;
+  }
+
+  &:active {
+    background: #dcecff;
+    border-color: #6f8eb0;
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $focus;
+    outline-offset: 2px;
+    border-color: #2f74b9;
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    background: #f3f6fb;
+    border-color: #c2d2e5;
+    color: #6f85a3;
+    opacity: 0.78;
+    cursor: not-allowed;
+    transform: none;
   }
 }
 
@@ -247,7 +276,7 @@ h2 {
     background: #fff;
     color: #213758;
     cursor: pointer;
-    transition: background 120ms ease, border-color 120ms ease;
+    transition: background 120ms ease, border-color 120ms ease, transform 90ms ease;
 
     &:hover {
       background: #f7fbff;
@@ -258,6 +287,28 @@ h2 {
       border-color: #2f74b9;
       background: #edf5ff;
       box-shadow: inset 0 0 0 1px rgba(0, 94, 162, 0.12);
+    }
+
+    &:focus-visible {
+      outline: 3px solid $focus;
+      outline-offset: 2px;
+      border-color: #2f74b9;
+    }
+
+    &:active {
+      background: #e6f1ff;
+      border-color: #7696b8;
+      transform: translateY(1px);
+    }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+      background: #f2f6fb;
+      border-color: #c2d2e5;
+      color: #6a809f;
+      opacity: 0.82;
+      cursor: not-allowed;
+      transform: none;
     }
   }
 }
@@ -328,6 +379,16 @@ h2 {
   background: #fff;
 }
 
+.prompt-form input:focus-visible,
+.prompt-form textarea:focus-visible,
+#prompt-output:focus-visible,
+#report-search:focus-visible,
+.tasks-filter-label select:focus-visible {
+  outline: 3px solid $focus;
+  outline-offset: 2px;
+  border-color: #2f74b9;
+}
+
 .prompt-actions {
   display: flex;
   align-items: center;
@@ -343,9 +404,34 @@ h2 {
   border-radius: $radius-md;
   padding: 0.52rem 0.85rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 90ms ease, box-shadow 120ms ease, color 120ms ease;
 
   &:hover {
     background: #004b86;
+  }
+
+  &:active {
+    background: #003e70;
+    border-color: #123766;
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $focus;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 94, 162, 0.2);
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    background: #b8c9dc;
+    border-color: #90a8c2;
+    color: #eaf0f7;
+    opacity: 0.85;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 }
 
@@ -570,6 +656,17 @@ h2 {
 :focus-visible {
   outline: 3px solid $focus;
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 footer {
