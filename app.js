@@ -1,7 +1,7 @@
 const reportList = document.querySelector('#report-list');
 const reportSearch = document.querySelector('#report-search');
 const reportView = document.querySelector('#report-view');
-const downloadButton = document.querySelector('#download-md');
+const downloadButton = document.querySelector('#download-pdf');
 const downloadSpreadsheetButton = document.querySelector('#download-spreadsheet');
 const promptForm = document.querySelector('#prompt-form');
 const promptOutput = document.querySelector('#prompt-output');
@@ -509,41 +509,262 @@ function buildPortfolioCsv() {
   return `\uFEFF${csvRows.join('\n')}`;
 }
 
-function toMarkdown(report) {
-  const { file, data } = report;
-  const lines = [
-    `# Top Task Report: ${titleFromFile(file)}`,
-    '',
-    `- URL: ${data.meta?.url || 'n/a'}`,
-    `- Audience: ${data.meta?.audience || 'n/a'}`,
-    `- Report status: ${data.meta?.report_status || 'Unreviewed'}`,
-    `- Scope: ${data.meta?.scope || 'n/a'}`,
-    `- Analyzed at: ${data.meta?.analyzed_at || 'n/a'}`,
-    '',
-    '## Tasks',
-    '',
-    '| ID | Task | Classification | Composite Score |',
-    '|---|---|---|---|',
-    ...(data.task_longlist || []).map((task) =>
-      `| ${task.id} | ${task.task_statement} | ${task.classification} | ${round(task.composite_score)} |`),
-    '',
-    '## Next steps',
-    '',
-    ...(data.next_steps || []).map((step) => `- ${step}`)
-  ];
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
-  return lines.join('\n');
+function formatTimestamp(value) {
+  if (!value) return 'n/a';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return parsed.toLocaleString();
+}
+
+function buildReportPdfHtml(report) {
+  const { file, data } = report;
+  const tasks = [...(data.task_longlist || [])].sort((a, b) => b.composite_score - a.composite_score);
+  const topTaskSet = new Set(data.top_tasks || []);
+  const tinyTaskSet = new Set(data.tiny_tasks || []);
+  const byClass = classifyCounts(tasks);
+  const averageScore = tasks.length
+    ? tasks.reduce((sum, task) => sum + (task.composite_score || 0), 0) / tasks.length
+    : 0;
+
+  const taskRows = tasks.map((task, index) => {
+    const evidenceText = (task.evidence || [])
+      .map((item) => `${item.source_url || 'n/a'} — ${item.element || 'n/a'} (${item.note || 'No note'})`)
+      .join('\n');
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${escapeHtml(task.id || '')}</td>
+        <td>${escapeHtml(task.task_statement || '')}</td>
+        <td>${escapeHtml(task.user_intent_category || '')}</td>
+        <td>${escapeHtml(task.classification || 'unknown')}</td>
+        <td>${task.scores?.frequency ?? ''}</td>
+        <td>${task.scores?.impact ?? ''}</td>
+        <td>${task.scores?.findability ?? ''}</td>
+        <td>${task.scores?.completability ?? ''}</td>
+        <td>${round(task.composite_score)}</td>
+        <td>${escapeHtml(task.rationale || '')}</td>
+        <td class="evidence-cell">${escapeHtml(evidenceText)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const noTasksRow = `
+    <tr>
+      <td colspan="12">No tasks available for this report.</td>
+    </tr>
+  `;
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Top Task Report: ${escapeHtml(titleFromFile(file))}</title>
+    <style>
+      :root {
+        --text: #14213d;
+        --muted: #4b5563;
+        --border: #d1d5db;
+        --background: #f8fafc;
+        --accent: #1d4ed8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+        color: var(--text);
+        line-height: 1.35;
+        margin: 0;
+        padding: 28px;
+        background: #fff;
+      }
+      h1, h2, h3 { margin: 0 0 8px; }
+      h1 { font-size: 24px; }
+      h2 {
+        margin-top: 22px;
+        font-size: 17px;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 4px;
+      }
+      p, li { font-size: 12px; }
+      .subtle { color: var(--muted); font-size: 11px; }
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--background);
+        padding: 10px 12px;
+      }
+      .card strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .kpi-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .list {
+        margin: 6px 0 0;
+        padding-left: 18px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+      th, td {
+        border: 1px solid var(--border);
+        padding: 6px;
+        font-size: 10px;
+        vertical-align: top;
+        word-break: break-word;
+      }
+      th {
+        background: #eff6ff;
+        text-align: left;
+      }
+      .evidence-cell {
+        white-space: pre-wrap;
+      }
+      @media print {
+        @page {
+          size: A4 landscape;
+          margin: 10mm;
+        }
+        body {
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Top Task Research Report</h1>
+      <p class="subtle">Generated from dashboard export • ${escapeHtml(file)}</p>
+    </header>
+
+    <section>
+      <div class="meta-grid">
+        <div class="card"><strong>Report Title</strong>${escapeHtml(titleFromFile(file))}</div>
+        <div class="card"><strong>Report Status</strong>${escapeHtml(data.meta?.report_status || 'Unreviewed')}</div>
+        <div class="card"><strong>URL</strong>${escapeHtml(data.meta?.url || 'n/a')}</div>
+        <div class="card"><strong>Audience</strong>${escapeHtml(data.meta?.audience || 'n/a')}</div>
+        <div class="card"><strong>Scope</strong>${escapeHtml(data.meta?.scope || 'n/a')}</div>
+        <div class="card"><strong>Analyzed At</strong>${escapeHtml(formatTimestamp(data.meta?.analyzed_at))}</div>
+        <div class="card"><strong>Analyst Confidence</strong>${escapeHtml(data.meta?.analyst_confidence || 'n/a')}</div>
+        <div class="card"><strong>Generated At</strong>${escapeHtml(formatTimestamp(new Date().toISOString()))}</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Executive Summary</h2>
+      <p>${escapeHtml(data.summary || 'No summary available.')}</p>
+    </section>
+
+    <section>
+      <h2>Task Portfolio Metrics</h2>
+      <div class="kpi-grid">
+        <div class="card"><strong>Total Tasks</strong><div class="kpi-value">${tasks.length}</div></div>
+        <div class="card"><strong>Avg Composite</strong><div class="kpi-value">${round(averageScore)}</div></div>
+        <div class="card"><strong>Top Tasks</strong><div class="kpi-value">${byClass.top || 0}</div></div>
+        <div class="card"><strong>Tiny Tasks</strong><div class="kpi-value">${byClass.tiny || 0}</div></div>
+      </div>
+      <div class="meta-grid">
+        <div class="card"><strong>Top Task IDs</strong>${escapeHtml((data.top_tasks || []).join(', ') || 'n/a')}</div>
+        <div class="card"><strong>Tiny Task IDs</strong>${escapeHtml((data.tiny_tasks || []).join(', ') || 'n/a')}</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recommended Validation Survey</h2>
+      <div class="meta-grid">
+        <div class="card"><strong>Instructions</strong>${escapeHtml(data.recommended_survey?.instructions || 'n/a')}</div>
+        <div class="card"><strong>Recommended Sample Size</strong>${escapeHtml(data.recommended_survey?.recommended_sample_size ?? 'n/a')}</div>
+        <div class="card"><strong>Task List for Voting</strong>${escapeHtml((data.recommended_survey?.task_list_for_voting || []).join(', ') || 'n/a')}</div>
+        <div class="card"><strong>Target Segments</strong>${escapeHtml((data.recommended_survey?.target_segments || []).join(', ') || 'n/a')}</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Next Steps</h2>
+      <ul class="list">
+        ${(data.next_steps || []).map((step) => `<li>${escapeHtml(step)}</li>`).join('') || '<li>No next steps provided.</li>'}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Detailed Task Register</h2>
+      <p class="subtle">
+        Tasks flagged as top in report metadata: ${topTaskSet.size}. Tasks flagged as tiny in report metadata: ${tinyTaskSet.size}.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Task Statement</th>
+            <th>Intent</th>
+            <th>Class</th>
+            <th>Freq</th>
+            <th>Impact</th>
+            <th>Findability</th>
+            <th>Completability</th>
+            <th>Composite</th>
+            <th>Rationale</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${taskRows || noTasksRow}
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>`;
+}
+
+function downloadPdfReport(report) {
+  const pdfWindow = window.open('', '_blank', 'noopener,noreferrer');
+  if (!pdfWindow) {
+    window.alert('Unable to open PDF preview. Please allow pop-ups for this site.');
+    return;
+  }
+
+  pdfWindow.document.open();
+  pdfWindow.document.write(buildReportPdfHtml(report));
+  pdfWindow.document.close();
+  pdfWindow.focus();
+  pdfWindow.print();
 }
 
 if (downloadButton) {
   downloadButton.addEventListener('click', () => {
     if (!selectedReport) return;
-    const blob = new Blob([toMarkdown(selectedReport)], { type: 'text/markdown;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${selectedReport.file.replace('.json', '')}.md`;
-    link.click();
-    URL.revokeObjectURL(link.href);
+    downloadPdfReport(selectedReport);
   });
 }
 
