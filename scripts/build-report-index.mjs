@@ -68,7 +68,6 @@ for (const report of manifest) {
       </div>
       <nav class="site-nav" aria-label="Main">
         <a href="../../index.html">Overview</a>
-        <a class="active" href="../../reports/">Reports</a>
         <a href="../../prompt.html">Build a Prompt</a>
       </nav>
     </header>
