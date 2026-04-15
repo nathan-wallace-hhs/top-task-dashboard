@@ -13,8 +13,8 @@ A static dashboard that reads report JSON files from `reports/`, visualizes task
 
 ## Pages
 
-- `index.html`: report explorer with report-level drill-down.
-- `overview.html`: portfolio view showing summary stats across all reports.
+- `index.html`: portfolio overview showing summary stats across all reports.
+- `report/`: report explorer with report-level drill-down.
 
 ## Styling
 
