@@ -234,15 +234,11 @@ async function loadReports() {
     };
   });
 
-  const filesToLoad = forcedReportFile
-    ? indexEntries.filter((entry) => entry.file === forcedReportFile)
-    : indexEntries;
-
-  if (forcedReportFile && !filesToLoad.length) {
+  if (forcedReportFile && !indexEntries.some((entry) => entry.file === forcedReportFile)) {
     throw new Error(`Report not found in index: ${forcedReportFile}`);
   }
 
-  const settledReports = await Promise.allSettled(filesToLoad.map(async (entry) => {
+  const settledReports = await Promise.allSettled(indexEntries.map(async (entry) => {
     const normalizedPath = String(entry.path || './').replace(/\/+$/, '');
     const pathCandidate = normalizedPath === '.'
       ? `${reportsBase}/${entry.file}`
@@ -283,7 +279,7 @@ async function loadReports() {
       const reason = result.reason instanceof Error
         ? result.reason.message
         : String(result.reason || 'Unknown error');
-      return { file: filesToLoad[index].file, message: reason };
+      return { file: indexEntries[index].file, message: reason };
     })
     .filter(Boolean);
 
