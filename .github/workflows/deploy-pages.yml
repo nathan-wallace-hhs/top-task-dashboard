@@ -2,7 +2,7 @@ name: Deploy GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -22,11 +22,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm ci
-      - run: npm run build
+
+      - name: Detect report JSON changes
+        id: report_changes
+        run: |
+          set -euo pipefail
+          BEFORE_SHA="${{ github.event.before }}"
+
+          EMPTY_TREE="$(git hash-object -t tree /dev/null)"
+
+          if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE_SHA="$EMPTY_TREE"
+          fi
+
+          if ! git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null && [ "$BEFORE_SHA" != "$EMPTY_TREE" ]; then
+            BEFORE_SHA="$EMPTY_TREE"
+          fi
+
+          if git diff --name-only "$BEFORE_SHA" "${{ github.sha }}" | grep -E '^reports/.*\.json$' >/dev/null; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Regenerate report index from reports JSON
+        if: steps.report_changes.outputs.changed == 'true'
+        run: npm run build:index
+
+      - name: Build static site
+        run: npm run build:site && npm run build:assets
+
       - run: touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
