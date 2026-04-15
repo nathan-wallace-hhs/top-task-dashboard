@@ -2,6 +2,7 @@ const reportList = document.querySelector('#report-list');
 const reportSearch = document.querySelector('#report-search');
 const reportView = document.querySelector('#report-view');
 const downloadButton = document.querySelector('#download-pdf');
+const downloadReportWorkbookButton = document.querySelector('#download-report-workbook');
 const downloadSpreadsheetButton = document.querySelector('#download-spreadsheet');
 const promptForm = document.querySelector('#prompt-form');
 const promptOutput = document.querySelector('#prompt-output');
@@ -392,7 +393,6 @@ function buildSingleReportWorkbook(report) {
   const { data, title } = report;
   const meta = data.meta || {};
   const allTasks = [...(data.task_longlist || [])].sort((a, b) => b.composite_score - a.composite_score);
-  const topTasks = allTasks.filter((task) => task.classification === 'top');
   const nowIso = new Date().toISOString();
 
   const toolExplanationRows = [
@@ -406,8 +406,9 @@ function buildSingleReportWorkbook(report) {
     ['What this workbook contains'],
     ['Sheet 1: Tool Explanation', 'Overview of the export and intended use.'],
     ['Sheet 2: Prompt & Methodology', 'Prompt framing, research method, and scoring model used.'],
-    ['Sheet 3: Test Metadata', 'Report metadata, confidence, evidence gaps, and aggregate counts.'],
-    ['Sheet 4: Top Tasks', 'Ranked top-classified tasks with scores, evidence, and rationale.']
+    ['Sheet 3: Overview', 'Report metadata, recommendations, confidence, evidence gaps, and aggregate counts.'],
+    ['Sheet 4: Top Tasks', 'All ranked tasks with scores, evidence, and rationale.'],
+    ['Sheet 5: Raw JSON', 'Full report payload to ensure complete data transparency.']
   ];
 
   const promptMethodologyRows = [
@@ -432,8 +433,8 @@ function buildSingleReportWorkbook(report) {
   ];
 
   const byClass = classifyCounts(allTasks);
-  const testMetadataRows = [
-    ['Test Metadata'],
+  const overviewRows = [
+    ['Overview'],
     [''],
     ['Report Status', reportStatus(report)],
     ['URL', meta.url || 'n/a'],
@@ -450,8 +451,12 @@ function buildSingleReportWorkbook(report) {
     ['Tiny Tasks', String(byClass.tiny || 0)],
     ['Unknown Tasks', String(byClass.unknown || 0)],
     ['Recommended Survey Instructions', data.recommended_survey?.instructions || ''],
+    ['Recommended Survey Task List For Voting', toJoinedList(data.recommended_survey?.task_list_for_voting) || ''],
     ['Recommended Survey Sample Size', data.recommended_survey?.recommended_sample_size ?? ''],
-    ['Recommended Survey Target Segments', toJoinedList(data.recommended_survey?.target_segments) || '']
+    ['Recommended Survey Target Segments', toJoinedList(data.recommended_survey?.target_segments) || ''],
+    ['Top Task IDs', toJoinedList(data.top_tasks) || ''],
+    ['Tiny Task IDs', toJoinedList(data.tiny_tasks) || ''],
+    ['Next Steps / Recommendations', toJoinedList(data.next_steps) || '']
   ];
 
   const topTaskHeader = [
@@ -469,8 +474,8 @@ function buildSingleReportWorkbook(report) {
     'Evidence Details (JSON)',
     'Rationale'
   ];
-  const topTaskRows = topTasks.length
-    ? topTasks.map((task, index) => [
+  const topTaskRows = allTasks.length
+    ? allTasks.map((task, index) => [
       String(index + 1),
       task.id || 'n/a',
       task.task_statement || 'n/a',
@@ -485,7 +490,13 @@ function buildSingleReportWorkbook(report) {
       task.evidence?.length ? JSON.stringify(task.evidence) : '',
       task.rationale || ''
     ])
-    : [['', '', 'No tasks are currently classified as top.', '', '', '', '', '', '', '', '', '', '']];
+    : [['', '', 'No tasks are available in this report.', '', '', '', '', '', '', '', '', '', '']];
+
+  const rawJsonRows = [
+    ['Raw JSON'],
+    [''],
+    [JSON.stringify(data, null, 2)]
+  ];
 
   return `<?xml version="1.0"?>
 <?mso-application progid="Excel.Sheet"?>
@@ -513,9 +524,9 @@ function buildSingleReportWorkbook(report) {
     : toWorkbookRow(row))).join('')}
   </Table>
  </Worksheet>
- <Worksheet ss:Name="Test Metadata">
+ <Worksheet ss:Name="Overview">
   <Table>
-   ${testMetadataRows.map((row, index) => (index === 0
+   ${overviewRows.map((row, index) => (index === 0
     ? `<Row><Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(row[0])}</Data></Cell></Row>`
     : toWorkbookRow(row))).join('')}
   </Table>
@@ -524,6 +535,13 @@ function buildSingleReportWorkbook(report) {
   <Table>
    <Row>${topTaskHeader.map((header) => `<Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(header)}</Data></Cell>`).join('')}</Row>
    ${topTaskRows.map((row) => toWorkbookRow(row)).join('')}
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Raw JSON">
+  <Table>
+   ${rawJsonRows.map((row, index) => (index === 0
+    ? `<Row><Cell ss:StyleID="Header"><Data ss:Type="String">${toWorkbookCell(row[0])}</Data></Cell></Row>`
+    : toWorkbookRow(row))).join('')}
   </Table>
  </Worksheet>
 </Workbook>`;
@@ -881,6 +899,19 @@ if (downloadButton) {
   downloadButton.addEventListener('click', () => {
     if (!selectedReport) return;
     downloadPdfReport(selectedReport);
+  });
+}
+
+if (downloadReportWorkbookButton) {
+  downloadReportWorkbookButton.addEventListener('click', () => {
+    if (!selectedReport) return;
+    const workbook = buildSingleReportWorkbook(selectedReport);
+    const blob = new Blob([workbook], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${selectedReport.file.replace('.json', '')}-report-workbook.xls`;
+    link.click();
+    URL.revokeObjectURL(link.href);
   });
 }
 
