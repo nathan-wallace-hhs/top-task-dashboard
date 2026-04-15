@@ -245,16 +245,33 @@ function renderReport() {
   reportView.innerHTML = `
     <h2>${selectedReport.title}</h2>
     <p>${data.summary || 'No summary available for this report.'}</p>
-    <div class="meta-grid">
-      <div class="card"><strong>URL</strong><br><a href="${data.meta.url}" target="_blank" rel="noreferrer">${data.meta.url}</a></div>
-      <div class="card"><strong>Audience</strong><br>${data.meta.audience || 'n/a'}</div>
-      <div class="card"><strong>Scope</strong><br>${data.meta.scope || 'n/a'}</div>
-      <div class="card"><strong>Analyzed</strong><br>${data.meta.analyzed_at || 'n/a'}</div>
-      <div class="card"><strong>Status</strong><br>${reportStatus(selectedReport)}</div>
+    <div class="report-meta-card card">
+      <dl class="report-meta-list">
+        <div class="report-meta-item">
+          <dt>URL</dt>
+          <dd><a href="${data.meta.url}" target="_blank" rel="noreferrer">${data.meta.url}</a></dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Audience</dt>
+          <dd>${data.meta.audience || 'n/a'}</dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Scope</dt>
+          <dd>${data.meta.scope || 'n/a'}</dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Analyzed</dt>
+          <dd>${data.meta.analyzed_at || 'n/a'}</dd>
+        </div>
+        <div class="report-meta-item">
+          <dt>Status</dt>
+          <dd>${reportStatus(selectedReport)}</dd>
+        </div>
+      </dl>
     </div>
 
     <h3>Score overview</h3>
-    <div class="meta-grid">${bars}</div>
+    <div class="stat-grid">${bars}</div>
 
     <div class="tasks-header">
       <h3>Tasks (${tasks.length}${filter === 'all' ? '' : ` filtered: ${filter}`})</h3>
