@@ -406,7 +406,7 @@ h2 {
 .tooltip-content {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 0.45rem);
+  top: calc(100% + 0.45rem);
   transform: translateX(-50%);
   min-width: 220px;
   max-width: 280px;
