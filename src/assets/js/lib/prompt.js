@@ -47,13 +47,13 @@ max_tasks: ${tokens.max_tasks}                          # Optional. Default 25. 
 ## Required Output Format
 Return output in **two parts, in this exact order**:
 
-1. A valid JSON object matching the schema below
-2. A structured Markdown report that summarizes the same findings for human review
+1. A valid JSON object matching the schema below, wrapped in a standalone `json` fenced code block
+2. A structured Markdown report that summarizes the same findings for human review (outside any code fence)
 
 Do not omit either part.
 
 ## Structured Output
-Return valid JSON matching this schema.
+Return valid JSON matching this schema, and place it inside a standalone fenced code block starting with ```json and ending with ```.
 
 Set \`summary\` to ≤150 words covering top 3–5 tasks, key risks, and what to validate with users next.
 
@@ -94,7 +94,7 @@ Set \`summary\` to ≤150 words covering top 3–5 tasks, key risks, and what to
 \`\`\`
 
 ## Markdown Report Requirements
-After the JSON, output a Markdown report with the following structure:
+After the JSON code block, output a Markdown report with the following structure (as normal Markdown, not inside a code fence):
 
 \`\`\`markdown
 # Top Task Identification Report
@@ -159,5 +159,10 @@ Repeat the same format for tasks classified as \`tiny\`, but keep rationale conc
 - JSON must remain valid and parseable.
 
 Before the Markdown report, print this exact separator line:
----MARKDOWN_REPORT---`;
+---MARKDOWN_REPORT---
+
+Output sequence checklist:
+1) ```json fenced block containing only valid JSON
+2) ---MARKDOWN_REPORT---
+3) Markdown report content`;
 }
