@@ -161,7 +161,8 @@ Set \`summary\` to ≤150 words covering top 3–5 tasks, key risks, and what to
   "summary": ""
 }
 \`\`\`
-
+`;
+}
 
 function updatePromptOutput() {
   if (!promptForm || !promptOutput) return;
