@@ -115,12 +115,11 @@ max_tasks: ${tokens.max_tasks}                          # Optional. Default 25. 
 - **Completability** — whether the user can actually finish it end-to-end
 
 ## Required Output Format
-Return output in **two parts, in this exact order**:
+Return output in **valid json, in this exact order**:
 
 1. A valid JSON object matching the schema below
-2. A structured Markdown report that summarizes the same findings for human review
 
-Do not omit either part.
+Do not omit any part.
 
 ## Structured Output
 Return valid JSON matching this schema.
@@ -162,75 +161,6 @@ Set \`summary\` to ≤150 words covering top 3–5 tasks, key risks, and what to
   "summary": ""
 }
 \`\`\`
-
-## Markdown Report Requirements
-After the JSON, output a Markdown report with the following structure:
-
-\`\`\`markdown
-# Top Task Identification Report
-
-## 1. Analysis Overview
-- URL:
-- Audience:
-- Scope:
-- Analyzed at:
-- Analyst confidence:
-- Report status:
-
-## 2. Executive Summary
-A concise summary of the top 3–5 tasks, major risks, and recommended validation steps.
-
-## 3. Evidence Gaps
-- List any missing evidence, unclear scope areas, blocked pages, or assumptions.
-
-## 4. Top Tasks
-### T01 — <task statement>
-- Intent category:
-- Classification:
-- Composite score:
-- Scores:
-  - Frequency:
-  - Impact:
-  - Findability:
-  - Completability:
-- Why it matters:
-- Evidence:
-  - \`<source_url>\` — \`<element>\`: \`<note>\`
-
-## 5. Secondary Tasks
-Repeat the same format for tasks classified as \`secondary\`.
-
-## 6. Tiny Tasks
-Repeat the same format for tasks classified as \`tiny\`, but keep rationale concise.
-
-## 7. Prioritized Top Task List
-1. T## — Task statement
-2. T## — Task statement
-3. T## — Task statement
-
-## 8. Recommended Voting Survey
-- Instructions:
-- Task list for voting:
-- Recommended sample size:
-- Target segments:
-
-## 9. Next Steps
-- Bullet list of recommended research, design, analytics, or content actions.
-\`\`\`
-
-## Rules
-- Write tasks in the user's voice, not the org's. "Apply for benefits," not "Benefits application portal."
-- No task longer than 9 words.
-- Every score must cite evidence; if evidence is missing, mark it in \`evidence_gaps\` and lower \`analyst_confidence\`.
-- If the URL cannot be fetched or scope is unclear, return an \`error\` object with \`missing_inputs\` instead of guessing.
-- Deterministic: same inputs should yield substantively the same longlist and rankings.
-- The Markdown report must be fully consistent with the JSON output.
-- Do not wrap the entire response in a single code fence.
-- JSON must remain valid and parseable.
-
-Before the Markdown report, print this exact separator line:
----MARKDOWN_REPORT---`;
-}
 
 
 function updatePromptOutput() {
