@@ -1,5 +1,11 @@
 [
   {
+    "file": "dab-section-with-data.json",
+    "slug": "dab-section-with-data",
+    "title": "Dab Section With Data",
+    "path": "./dab-section-with-data/"
+  },
+  {
     "file": "DAB-Section.json",
     "slug": "DAB-Section",
     "title": "Dab Section",
