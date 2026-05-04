@@ -1,226 +1,248 @@
 {
   "meta": {
-    "url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+    "url": "https://www.hhs.gov/about/agencies/dab/index.html",
     "audience": "General Public",
     "scope": "entire section",
-    "analyzed_at": "2026-05-04T00:00:00Z",
+    "analyzed_at": "2026-05-04",
     "analyst_confidence": "medium",
     "evidence_gaps": [
-      "No direct analytics or search data provided",
-      "Limited visibility into downstream task completion (e.g., response times, outcomes)",
-      "Unclear volume differences between contact channels"
+      "No direct access to analytics from 'Most Popular Pages DAB - Copy.xlsx'",
+      "Limited visibility into actual user journeys and success rates",
+      "No search log or support ticket data to validate frequency assumptions"
     ],
     "report_status": "Unreviewed"
   },
   "task_longlist": [
     {
       "id": "T01",
-      "task_statement": "Find how to contact DAB office",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Page title and contact section",
-          "note": "Primary purpose of page is providing contact details"
-        }
-      ],
-      "scores": {"frequency": 5, "impact": 5, "findability": 5, "completability": 5},
-      "composite_score": 5.0,
-      "classification": "top",
-      "rationale": "Core purpose of page; all users likely come for this"
-    },
-    {
-      "id": "T02",
-      "task_statement": "Get correct office for my case",
-      "user_intent_category": "Navigation",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Office-specific contact listings",
-          "note": "Different divisions listed (e.g., Civil Remedies, Medicare Appeals)"
-        }
-      ],
-      "scores": {"frequency": 5, "impact": 5, "findability": 3, "completability": 4},
-      "composite_score": 4.25,
-      "classification": "top",
-      "rationale": "Misrouting leads to delays and failed outcomes"
-    },
-    {
-      "id": "T03",
-      "task_statement": "Find phone number for DAB staff",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Phone numbers listed",
-          "note": "Phone is a primary contact method"
-        }
-      ],
-      "scores": {"frequency": 4, "impact": 4, "findability": 5, "completability": 5},
-      "composite_score": 4.5,
-      "classification": "top",
-      "rationale": "High-demand direct contact method"
-    },
-    {
-      "id": "T04",
-      "task_statement": "Find email address for inquiries",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Email contact listings",
-          "note": "Emails provided per office"
-        }
-      ],
-      "scores": {"frequency": 4, "impact": 4, "findability": 5, "completability": 5},
-      "composite_score": 4.5,
-      "classification": "top",
-      "rationale": "Common asynchronous contact channel"
-    },
-    {
-      "id": "T05",
-      "task_statement": "Find mailing address for submissions",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Physical mailing addresses",
-          "note": "Addresses listed for formal submissions"
-        }
-      ],
-      "scores": {"frequency": 3, "impact": 5, "findability": 5, "completability": 5},
-      "composite_score": 4.5,
-      "classification": "top",
-      "rationale": "Critical for legal/official filings"
-    },
-    {
-      "id": "T06",
-      "task_statement": "Understand which DAB division I need",
-      "user_intent_category": "Decision",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Division descriptions",
-          "note": "Minimal context for choosing correct division"
-        }
-      ],
-      "scores": {"frequency": 4, "impact": 5, "findability": 2, "completability": 3},
-      "composite_score": 3.5,
-      "classification": "top",
-      "rationale": "High confusion risk; critical to success"
-    },
-    {
-      "id": "T07",
-      "task_statement": "Contact Civil Remedies Division staff",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Civil Remedies Division section",
-          "note": "Dedicated contact info"
-        }
-      ],
-      "scores": {"frequency": 3, "impact": 4, "findability": 4, "completability": 5},
-      "composite_score": 4.0,
-      "classification": "secondary",
-      "rationale": "Important but narrower audience"
-    },
-    {
-      "id": "T08",
-      "task_statement": "Contact Medicare Appeals Council office",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Medicare Appeals Council contact info",
-          "note": "Specific office contact"
-        }
-      ],
-      "scores": {"frequency": 3, "impact": 5, "findability": 4, "completability": 5},
-      "composite_score": 4.25,
-      "classification": "secondary",
-      "rationale": "High impact for subset of users"
-    },
-    {
-      "id": "T09",
-      "task_statement": "Find fax number for submissions",
-      "user_intent_category": "Contact",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Fax details",
-          "note": "Legacy but still used channel"
-        }
-      ],
-      "scores": {"frequency": 2, "impact": 4, "findability": 4, "completability": 5},
-      "composite_score": 3.75,
-      "classification": "secondary",
-      "rationale": "Declining but still relevant"
-    },
-    {
-      "id": "T10",
-      "task_statement": "Understand hours of operation",
-      "user_intent_category": "Information",
-      "evidence": [
-        {
-          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
-          "element": "Contact details context",
-          "note": "Hours may be implied or missing"
-        }
-      ],
-      "scores": {"frequency": 2, "impact": 3, "findability": 2, "completability": 2},
-      "composite_score": 2.25,
-      "classification": "tiny",
-      "rationale": "Useful but not core to most users"
-    },
-    {
-      "id": "T11",
-      "task_statement": "Find general DAB information page",
-      "user_intent_category": "Navigation",
+      "task_statement": "File an appeal for an HHS decision",
+      "user_intent_category": "Transactional",
       "evidence": [
         {
           "source_url": "https://www.hhs.gov/about/agencies/dab/",
-          "element": "Breadcrumb/navigation links",
-          "note": "Links to broader DAB content"
+          "element": "File an Appeal Online CTA",
+          "note": "Primary call-to-action directs users to e-filing system"
+        },
+        {
+          "source_url": "https://dab.efile.hhs.gov/",
+          "element": "E-file system homepage",
+          "note": "Dedicated system for submitting appeals"
+        }
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 5, "completability": 4},
+      "composite_score": 4.75,
+      "classification": "top",
+      "rationale": "Core purpose of site; clearly emphasized and supported by dedicated system"
+    },
+    {
+      "id": "T02",
+      "task_statement": "Determine if my case can be appealed",
+      "user_intent_category": "Decision-making",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/",
+          "element": "Eligibility guidance ('Examine your paperwork')",
+          "note": "Helps users assess whether they should appeal"
+        }
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 4, "completability": 3},
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "Critical prerequisite to filing appeal; somewhat complex to interpret"
+    },
+    {
+      "id": "T03",
+      "task_statement": "Find which DAB division handles my case",
+      "user_intent_category": "Decision-making",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/different-appeals-at-dab/index.html",
+          "element": "Different types of appeals",
+          "note": "Explains routing to Board, ALJ, or Council"
+        }
+      ],
+      "scores": {"frequency": 4, "impact": 5, "findability": 4, "completability": 3},
+      "composite_score": 4.0,
+      "classification": "top",
+      "rationale": "Essential for correct filing; errors could delay appeals"
+    },
+    {
+      "id": "T04",
+      "task_statement": "Search prior DAB or ALJ decisions",
+      "user_intent_category": "Research",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/decisions/index.html",
+          "element": "Decision search sections",
+          "note": "Provides searchable decisions by category"
+        }
+      ],
+      "scores": {"frequency": 4, "impact": 4, "findability": 4, "completability": 4},
+      "composite_score": 4.0,
+      "classification": "top",
+      "rationale": "Key research task for legal and compliance users"
+    },
+    {
+      "id": "T05",
+      "task_statement": "Access instructions for filing an appeal",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {
+          "source_url": "https://dab.efile.hhs.gov/",
+          "element": "E-filing instructions and FAQs",
+          "note": "Includes deadlines, signatures, and FAQs"
+        }
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 4, "completability": 4},
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "Critical support task enabling successful appeal submission"
+    },
+    {
+      "id": "T06",
+      "task_statement": "Contact DAB for help with my case",
+      "user_intent_category": "Support",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Contact directory",
+          "note": "Extensive contact info for divisions"
+        }
+      ],
+      "scores": {"frequency": 4, "impact": 4, "findability": 3, "completability": 4},
+      "composite_score": 3.75,
+      "classification": "secondary",
+      "rationale": "Important fallback task; navigation may be complex due to many contacts"
+    },
+    {
+      "id": "T07",
+      "task_statement": "Learn about alternative dispute resolution options",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/",
+          "element": "ADR services section",
+          "note": "Mentions mediation and conflict resolution"
+        }
+      ],
+      "scores": {"frequency": 3, "impact": 4, "findability": 3, "completability": 3},
+      "composite_score": 3.25,
+      "classification": "secondary",
+      "rationale": "Relevant but less central than filing appeals"
+    },
+    {
+      "id": "T08",
+      "task_statement": "Understand what the DAB does",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/index.html",
+          "element": "About DAB overview",
+          "note": "Explains mission and function"
+        }
+      ],
+      "scores": {"frequency": 3, "impact": 2, "findability": 4, "completability": 5},
+      "composite_score": 3.5,
+      "classification": "secondary",
+      "rationale": "Orientation task; less critical than transactional tasks"
+    },
+    {
+      "id": "T09",
+      "task_statement": "Find deadlines and requirements for appeals",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {
+          "source_url": "https://dab.efile.hhs.gov/",
+          "element": "Deadlines and requirements",
+          "note": "Includes e-filing deadlines and rules"
+        }
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 3, "completability": 3},
+      "composite_score": 4.0,
+      "classification": "top",
+      "rationale": "High-risk task; missing deadlines has severe consequences"
+    },
+    {
+      "id": "T10",
+      "task_statement": "Provide feedback on DAB procedures",
+      "user_intent_category": "Engagement",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/",
+          "element": "Stakeholder feedback link",
+          "note": "Allows procedural feedback submission"
+        }
+      ],
+      "scores": {"frequency": 2, "impact": 2, "findability": 3, "completability": 3},
+      "composite_score": 2.5,
+      "classification": "tiny",
+      "rationale": "Low-frequency engagement task"
+    },
+    {
+      "id": "T11",
+      "task_statement": "Explore DAB careers or job opportunities",
+      "user_intent_category": "Transactional",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/",
+          "element": "Careers link",
+          "note": "Provides job and internship info"
+        }
+      ],
+      "scores": {"frequency": 2, "impact": 3, "findability": 4, "completability": 4},
+      "composite_score": 3.25,
+      "classification": "tiny",
+      "rationale": "Not core to primary audience intent"
+    },
+    {
+      "id": "T12",
+      "task_statement": "Read news or updates about DAB",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/",
+          "element": "DAB highlights",
+          "note": "Announcements and updates"
         }
       ],
       "scores": {"frequency": 2, "impact": 2, "findability": 4, "completability": 5},
       "composite_score": 3.25,
       "classification": "tiny",
-      "rationale": "Peripheral to contact intent"
+      "rationale": "Peripheral to main tasks"
     }
   ],
-  "top_tasks": ["T01", "T02", "T03", "T04", "T05", "T06"],
-  "tiny_tasks": ["T10", "T11"],
+  "top_tasks": ["T01", "T02", "T03", "T04", "T05", "T09"],
+  "tiny_tasks": ["T10", "T11", "T12"],
   "recommended_survey": {
-    "instructions": "Select the 5 tasks most important to you when visiting this page.",
+    "instructions": "Select the 5 most important tasks you came to this site to complete. Then select the 3 least important.",
     "task_list_for_voting": [
-      "Find how to contact DAB office",
-      "Get correct office for my case",
-      "Find phone number for DAB staff",
-      "Find email address for inquiries",
-      "Find mailing address for submissions",
-      "Understand which DAB division I need",
-      "Contact Civil Remedies Division staff",
-      "Contact Medicare Appeals Council office",
-      "Find fax number for submissions",
-      "Understand hours of operation",
-      "Find general DAB information page"
+      "File an appeal for an HHS decision",
+      "Determine if my case can be appealed",
+      "Find which DAB division handles my case",
+      "Search prior DAB or ALJ decisions",
+      "Access instructions for filing an appeal",
+      "Find deadlines and requirements for appeals",
+      "Contact DAB for help with my case",
+      "Learn about alternative dispute resolution options",
+      "Understand what the DAB does",
+      "Provide feedback on DAB procedures",
+      "Explore DAB careers or job opportunities",
+      "Read news or updates about DAB"
     ],
-    "recommended_sample_size": 200,
+    "recommended_sample_size": 100,
     "target_segments": [
-      "Medicare beneficiaries",
-      "Healthcare providers",
-      "Legal representatives",
-      "General public with DAB cases"
+      "Individuals filing appeals (Medicare, CMS, FDA cases)",
+      "Legal representatives and compliance professionals",
+      "Healthcare providers and organizations",
+      "General public with administrative disputes"
     ]
   },
   "next_steps": [
-    "Validate top tasks through user voting survey",
-    "Analyze misrouting rates between divisions",
-    "Test findability of correct division selection",
-    "Improve labeling and decision support for division selection",
-    "Incorporate analytics and search logs for refinement"
+    "Validate top tasks via survey with real users",
+    "Analyze search logs and top pages for behavioral confirmation",
+    "Audit findability of deadlines and eligibility guidance",
+    "Simplify decision pathways for appeal type and division selection",
+    "Test usability of e-filing entry points"
   ],
-  "summary": "The dominant user needs are contacting DAB, selecting the correct division, and accessing phone/email/mailing details. The highest-risk failure is misrouting—users struggle to determine the right office, which can delay legal or appeals processes. Contact details themselves are easy to find, but decision-making is not well supported. Validation should focus on whether users can correctly identify their division and complete contact tasks without confusion. Improving decision guidance is likely the biggest UX gain."
+  "summary": "Top tasks center on filing appeals, determining eligibility, identifying the correct division, and accessing instructions and deadlines. These are high-frequency, high-impact actions directly tied to the DAB’s core function. Key risks include unclear eligibility guidance, complex routing between divisions, and difficulty finding deadlines—all of which could lead to failed or delayed appeals. Secondary tasks like contact and ADR support play a supporting role, while careers and news are low-priority. Next validation should confirm whether users struggle most with determining appeal eligibility and navigating to the correct filing path."
 }
