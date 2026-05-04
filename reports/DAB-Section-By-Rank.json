@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "url": "https://www.hhs.gov/about/agencies/dab/index.html",
+    "audience": "General Public",
+    "scope": "entire section",
+    "analyzed_at": "2026-05-04",
+    "analyst_confidence": "high",
+    "evidence_gaps": [
+      "No direct user research (search logs, support tickets)",
+      "Limited behavioral data beyond pageviews",
+      "No task completion or failure metrics"
+    ],
+    "report_status": "Unreviewed"
+  },
+  "task_longlist": [
+    {
+      "id": "T01",
+      "task_statement": "Find a specific DAB decision by name",
+      "user_intent_category": "Information retrieval",
+      "evidence": [
+        {"source_url": "decisions/alj-decisions/2023/alj-cr6233", "element": "Top pageviews", "note": "Individual decisions dominate traffic"},
+        {"source_url": "decisions/board-decisions/2024/board-dab-3135", "element": "Repeated pattern", "note": "Many individual case pages in top traffic"}
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 3, "completability": 4},
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "High demand for known-item lookup; core reason users visit"
+    },
+    {
+      "id": "T02",
+      "task_statement": "Browse all Administrative Law Judge decisions",
+      "user_intent_category": "Information browsing",
+      "evidence": [
+        {"source_url": "decisions/alj-decisions/index.html", "element": "Rank #2", "note": "High aggregate traffic"},
+        {"source_url": "decisions/alj-decisions-by-year", "element": "Navigation structure", "note": "Organized browsing paths"}
+      ],
+      "scores": {"frequency": 5, "impact": 4, "findability": 4, "completability": 4},
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "Primary entry point for exploring decisions"
+    },
+    {
+      "id": "T03",
+      "task_statement": "Browse Board decisions across years",
+      "user_intent_category": "Information browsing",
+      "evidence": [
+        {"source_url": "decisions/board-decisions/index.html", "element": "Rank #5", "note": "High traffic"},
+        {"source_url": "decisions/board-decisions/board-decisions-by-year", "element": "Rank #7", "note": "Year filtering behavior"}
+      ],
+      "scores": {"frequency": 5, "impact": 4, "findability": 4, "completability": 4},
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "Parallel to ALJ decisions; core content consumption task"
+    },
+    {
+      "id": "T04",
+      "task_statement": "Understand how to file an appeal",
+      "user_intent_category": "Process understanding",
+      "evidence": [
+        {"source_url": "filing-an-appeal-online", "element": "Rank #15", "note": "Strong engagement for action-oriented task"},
+        {"source_url": "different-appeals-at-dab", "element": "Task hub", "note": "Explains pathways"}
+      ],
+      "scores": {"frequency": 4, "impact": 5, "findability": 3, "completability": 3},
+      "composite_score": 3.75,
+      "classification": "top",
+      "rationale": "Critical but less frequent; high consequence if misunderstood"
+    },
+    {
+      "id": "T05",
+      "task_statement": "Submit an appeal online",
+      "user_intent_category": "Transaction",
+      "evidence": [
+        {"source_url": "filing-an-appeal-online", "element": "CTA page", "note": "Direct task completion page"}
+      ],
+      "scores": {"frequency": 3, "impact": 5, "findability": 3, "completability": 3},
+      "composite_score": 3.5,
+      "classification": "top",
+      "rationale": "High-stakes task; likely subset of users but critical"
+    },
+    {
+      "id": "T06",
+      "task_statement": "Find Medicare Appeals Council decisions",
+      "user_intent_category": "Information retrieval",
+      "evidence": [
+        {"source_url": "decisions/council-decisions", "element": "Rank #10", "note": "Significant traffic"}
+      ],
+      "scores": {"frequency": 4, "impact": 4, "findability": 4, "completability": 4},
+      "composite_score": 4.0,
+      "classification": "top",
+      "rationale": "Distinct user group seeking specific decision type"
+    },
+    {
+      "id": "T07",
+      "task_statement": "Learn differences between appeal types",
+      "user_intent_category": "Process understanding",
+      "evidence": [
+        {"source_url": "different-appeals-at-dab", "element": "Rank #17", "note": "Explainer content"}
+      ],
+      "scores": {"frequency": 3, "impact": 5, "findability": 3, "completability": 3},
+      "composite_score": 3.5,
+      "classification": "secondary",
+      "rationale": "Important precursor to filing appeals"
+    },
+    {
+      "id": "T08",
+      "task_statement": "Find forms needed for appeals",
+      "user_intent_category": "Task support",
+      "evidence": [
+        {"source_url": "appeals-to-council/forms", "element": "Rank #26", "note": "Moderate traffic"}
+      ],
+      "scores": {"frequency": 3, "impact": 5, "findability": 3, "completability": 4},
+      "composite_score": 3.75,
+      "classification": "secondary",
+      "rationale": "Necessary for completing appeal process"
+    },
+    {
+      "id": "T09",
+      "task_statement": "Look up decisions by year",
+      "user_intent_category": "Information browsing",
+      "evidence": [
+        {"source_url": "alj-decisions-by-year", "element": "Rank #8", "note": "Strong usage"},
+        {"source_url": "board-decisions-by-year", "element": "Rank #7", "note": "Parallel behavior"}
+      ],
+      "scores": {"frequency": 4, "impact": 3, "findability": 4, "completability": 4},
+      "composite_score": 3.75,
+      "classification": "secondary",
+      "rationale": "Common filtering behavior"
+    },
+    {
+      "id": "T10",
+      "task_statement": "Find contact information for DAB",
+      "user_intent_category": "Support",
+      "evidence": [
+        {"source_url": "about-dab/contact-dab", "element": "Rank #19", "note": "Moderate traffic"}
+      ],
+      "scores": {"frequency": 3, "impact": 4, "findability": 4, "completability": 5},
+      "composite_score": 4.0,
+      "classification": "secondary",
+      "rationale": "Support fallback when tasks fail"
+    },
+    {
+      "id": "T11",
+      "task_statement": "Understand DAB structure and roles",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {"source_url": "about-dab/who-are-the-board-members-and-judges", "element": "Rank #11", "note": "Notable interest"}
+      ],
+      "scores": {"frequency": 3, "impact": 2, "findability": 4, "completability": 5},
+      "composite_score": 3.5,
+      "classification": "tiny",
+      "rationale": "Informational but not core to task completion"
+    },
+    {
+      "id": "T12",
+      "task_statement": "Explore DAB career opportunities",
+      "user_intent_category": "Career",
+      "evidence": [
+        {"source_url": "opencareers.html", "element": "Rank #21", "note": "Low relative traffic"}
+      ],
+      "scores": {"frequency": 2, "impact": 2, "findability": 4, "completability": 4},
+      "composite_score": 3.0,
+      "classification": "tiny",
+      "rationale": "Peripheral audience segment"
+    },
+    {
+      "id": "T13",
+      "task_statement": "Learn about ADR services and mediation",
+      "user_intent_category": "Informational",
+      "evidence": [
+        {"source_url": "adr-services/index.html", "element": "Rank #32", "note": "Lower usage"}
+      ],
+      "scores": {"frequency": 2, "impact": 3, "findability": 3, "completability": 4},
+      "composite_score": 3.0,
+      "classification": "tiny",
+      "rationale": "Niche interest"
+    }
+  ],
+  "top_tasks": ["T01", "T02", "T03", "T04", "T05", "T06"],
+  "tiny_tasks": ["T11", "T12", "T13"],
+  "recommended_survey": {
+    "instructions": "Select the 5 tasks that matter most to you when visiting this site.",
+    "task_list_for_voting": [
+      "Find a specific DAB decision by name",
+      "Browse Administrative Law Judge decisions",
+      "Browse Board decisions",
+      "Understand how to file an appeal",
+      "Submit an appeal online",
+      "Find Medicare Appeals Council decisions",
+      "Learn differences between appeal types",
+      "Find forms needed for appeals",
+      "Look up decisions by year",
+      "Find contact information for DAB",
+      "Understand DAB structure and roles",
+      "Explore career opportunities",
+      "Learn about ADR services"
+    ],
+    "recommended_sample_size": 400,
+    "target_segments": [
+      "Healthcare providers involved in appeals",
+      "Legal professionals",
+      "General public filing appeals",
+      "Researchers reviewing decisions"
+    ]
+  },
+  "next_steps": [
+    "Validate top tasks via survey with real users",
+    "Analyze search logs to confirm known-item lookup dominance",
+    "Audit navigation to prioritize decisions access",
+    "Simplify appeal filing pathways and guidance",
+    "Reduce prominence of low-value informational content"
+  ],
+  "summary": "User behavior is dominated by decision lookup and browsing (ALJ, Board, and Council decisions), which represent the core purpose of the site. Filing and understanding appeals are high-impact but less frequent tasks with potential usability risks due to complexity. The biggest risk is over-prioritizing organizational or informational content while users primarily want fast access to decisions. Validation should focus on confirming the dominance of decision retrieval vs. appeal-related tasks and ensuring navigation supports rapid known-item lookup."
+}
