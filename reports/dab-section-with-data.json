@@ -1,0 +1,226 @@
+{
+  "meta": {
+    "url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+    "audience": "General Public",
+    "scope": "entire section",
+    "analyzed_at": "2026-05-04T00:00:00Z",
+    "analyst_confidence": "medium",
+    "evidence_gaps": [
+      "No direct analytics or search data provided",
+      "Limited visibility into downstream task completion (e.g., response times, outcomes)",
+      "Unclear volume differences between contact channels"
+    ],
+    "report_status": "Unreviewed"
+  },
+  "task_longlist": [
+    {
+      "id": "T01",
+      "task_statement": "Find how to contact DAB office",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Page title and contact section",
+          "note": "Primary purpose of page is providing contact details"
+        }
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 5, "completability": 5},
+      "composite_score": 5.0,
+      "classification": "top",
+      "rationale": "Core purpose of page; all users likely come for this"
+    },
+    {
+      "id": "T02",
+      "task_statement": "Get correct office for my case",
+      "user_intent_category": "Navigation",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Office-specific contact listings",
+          "note": "Different divisions listed (e.g., Civil Remedies, Medicare Appeals)"
+        }
+      ],
+      "scores": {"frequency": 5, "impact": 5, "findability": 3, "completability": 4},
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "Misrouting leads to delays and failed outcomes"
+    },
+    {
+      "id": "T03",
+      "task_statement": "Find phone number for DAB staff",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Phone numbers listed",
+          "note": "Phone is a primary contact method"
+        }
+      ],
+      "scores": {"frequency": 4, "impact": 4, "findability": 5, "completability": 5},
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "High-demand direct contact method"
+    },
+    {
+      "id": "T04",
+      "task_statement": "Find email address for inquiries",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Email contact listings",
+          "note": "Emails provided per office"
+        }
+      ],
+      "scores": {"frequency": 4, "impact": 4, "findability": 5, "completability": 5},
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "Common asynchronous contact channel"
+    },
+    {
+      "id": "T05",
+      "task_statement": "Find mailing address for submissions",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Physical mailing addresses",
+          "note": "Addresses listed for formal submissions"
+        }
+      ],
+      "scores": {"frequency": 3, "impact": 5, "findability": 5, "completability": 5},
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "Critical for legal/official filings"
+    },
+    {
+      "id": "T06",
+      "task_statement": "Understand which DAB division I need",
+      "user_intent_category": "Decision",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Division descriptions",
+          "note": "Minimal context for choosing correct division"
+        }
+      ],
+      "scores": {"frequency": 4, "impact": 5, "findability": 2, "completability": 3},
+      "composite_score": 3.5,
+      "classification": "top",
+      "rationale": "High confusion risk; critical to success"
+    },
+    {
+      "id": "T07",
+      "task_statement": "Contact Civil Remedies Division staff",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Civil Remedies Division section",
+          "note": "Dedicated contact info"
+        }
+      ],
+      "scores": {"frequency": 3, "impact": 4, "findability": 4, "completability": 5},
+      "composite_score": 4.0,
+      "classification": "secondary",
+      "rationale": "Important but narrower audience"
+    },
+    {
+      "id": "T08",
+      "task_statement": "Contact Medicare Appeals Council office",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Medicare Appeals Council contact info",
+          "note": "Specific office contact"
+        }
+      ],
+      "scores": {"frequency": 3, "impact": 5, "findability": 4, "completability": 5},
+      "composite_score": 4.25,
+      "classification": "secondary",
+      "rationale": "High impact for subset of users"
+    },
+    {
+      "id": "T09",
+      "task_statement": "Find fax number for submissions",
+      "user_intent_category": "Contact",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Fax details",
+          "note": "Legacy but still used channel"
+        }
+      ],
+      "scores": {"frequency": 2, "impact": 4, "findability": 4, "completability": 5},
+      "composite_score": 3.75,
+      "classification": "secondary",
+      "rationale": "Declining but still relevant"
+    },
+    {
+      "id": "T10",
+      "task_statement": "Understand hours of operation",
+      "user_intent_category": "Information",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/about-dab/contact-dab/index.html",
+          "element": "Contact details context",
+          "note": "Hours may be implied or missing"
+        }
+      ],
+      "scores": {"frequency": 2, "impact": 3, "findability": 2, "completability": 2},
+      "composite_score": 2.25,
+      "classification": "tiny",
+      "rationale": "Useful but not core to most users"
+    },
+    {
+      "id": "T11",
+      "task_statement": "Find general DAB information page",
+      "user_intent_category": "Navigation",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/about/agencies/dab/",
+          "element": "Breadcrumb/navigation links",
+          "note": "Links to broader DAB content"
+        }
+      ],
+      "scores": {"frequency": 2, "impact": 2, "findability": 4, "completability": 5},
+      "composite_score": 3.25,
+      "classification": "tiny",
+      "rationale": "Peripheral to contact intent"
+    }
+  ],
+  "top_tasks": ["T01", "T02", "T03", "T04", "T05", "T06"],
+  "tiny_tasks": ["T10", "T11"],
+  "recommended_survey": {
+    "instructions": "Select the 5 tasks most important to you when visiting this page.",
+    "task_list_for_voting": [
+      "Find how to contact DAB office",
+      "Get correct office for my case",
+      "Find phone number for DAB staff",
+      "Find email address for inquiries",
+      "Find mailing address for submissions",
+      "Understand which DAB division I need",
+      "Contact Civil Remedies Division staff",
+      "Contact Medicare Appeals Council office",
+      "Find fax number for submissions",
+      "Understand hours of operation",
+      "Find general DAB information page"
+    ],
+    "recommended_sample_size": 200,
+    "target_segments": [
+      "Medicare beneficiaries",
+      "Healthcare providers",
+      "Legal representatives",
+      "General public with DAB cases"
+    ]
+  },
+  "next_steps": [
+    "Validate top tasks through user voting survey",
+    "Analyze misrouting rates between divisions",
+    "Test findability of correct division selection",
+    "Improve labeling and decision support for division selection",
+    "Incorporate analytics and search logs for refinement"
+  ],
+  "summary": "The dominant user needs are contacting DAB, selecting the correct division, and accessing phone/email/mailing details. The highest-risk failure is misrouting—users struggle to determine the right office, which can delay legal or appeals processes. Contact details themselves are easy to find, but decision-making is not well supported. Validation should focus on whether users can correctly identify their division and complete contact tasks without confusion. Improving decision guidance is likely the biggest UX gain."
+}
