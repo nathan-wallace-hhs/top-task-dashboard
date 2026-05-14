@@ -1,9 +1,9 @@
 [
   {
-    "file": "dab-section-with-data.json",
-    "slug": "dab-section-with-data",
-    "title": "Dab Section With Data",
-    "path": "./dab-section-with-data/"
+    "file": "DAB-Section-By-Rank.json",
+    "slug": "DAB-Section-By-Rank",
+    "title": "Dab Section By Rank",
+    "path": "./DAB-Section-By-Rank/"
   },
   {
     "file": "DAB-Section.json",
@@ -34,6 +34,12 @@
     "slug": "hhs-careers",
     "title": "HHS Careers",
     "path": "./hhs-careers/"
+  },
+  {
+    "file": "hhs-hipaa-privacy-laws-regulations.json",
+    "slug": "hhs-hipaa-privacy-laws-regulations",
+    "title": "HHS HIPAA Privacy Laws Regulations",
+    "path": "./hhs-hipaa-privacy-laws-regulations/"
   },
   {
     "file": "hhs-hipaa.json",
