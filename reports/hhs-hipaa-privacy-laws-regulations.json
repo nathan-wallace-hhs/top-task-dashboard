@@ -1,0 +1,469 @@
+{
+  "meta": {
+    "url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+    "audience": "General Public, Healthcare Professionals",
+    "scope": "page",
+    "analyzed_at": "2026-05-13T00:00:00Z",
+    "analyst_confidence": "high",
+    "evidence_gaps": [
+      "No analytics, search logs, or support ticket data provided",
+      "No user journey completion metrics available",
+      "No information architecture performance data available",
+      "No stakeholder interviews or VOC research provided"
+    ],
+    "report_status": "Unreviewed"
+  },
+  "task_longlist": [
+    {
+      "id": "T01",
+      "task_statement": "Understand what HIPAA protects",
+      "user_intent_category": "Learn",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "What Information is Protected",
+          "note": "Core explanatory section defining protected health information (PHI)"
+        },
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/index.html",
+          "element": "The HIPAA Privacy Rule overview",
+          "note": "Defines scope of protected health information and privacy standards"
+        }
+      ],
+      "scores": {
+        "frequency": 5,
+        "impact": 5,
+        "findability": 4,
+        "completability": 4
+      },
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "Foundational task for both professionals and the public. Central to understanding compliance obligations and privacy rights."
+    },
+    {
+      "id": "T02",
+      "task_statement": "Determine if HIPAA applies to me",
+      "user_intent_category": "Eligibility",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Who is Covered by the Privacy Rule",
+          "note": "Explains covered entities and applicability"
+        },
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "CMS decision tool reference",
+          "note": "Directs users to determine coverage status"
+        }
+      ],
+      "scores": {
+        "frequency": 5,
+        "impact": 5,
+        "findability": 4,
+        "completability": 4
+      },
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "One of the most critical user intents because compliance responsibilities depend on coverage determination."
+    },
+    {
+      "id": "T03",
+      "task_statement": "Learn permitted PHI disclosures",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Permitted Uses and Disclosures",
+          "note": "Explains when PHI can be shared without authorization"
+        }
+      ],
+      "scores": {
+        "frequency": 5,
+        "impact": 5,
+        "findability": 3,
+        "completability": 4
+      },
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "High-risk operational area with significant legal and compliance implications."
+    },
+    {
+      "id": "T04",
+      "task_statement": "Find HIPAA privacy rule requirements",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/index.html",
+          "element": "Privacy Rule overview",
+          "note": "Primary entry point for rule requirements"
+        },
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Summary of the HIPAA Privacy Rule",
+          "note": "Detailed summary of obligations and standards"
+        }
+      ],
+      "scores": {
+        "frequency": 5,
+        "impact": 5,
+        "findability": 4,
+        "completability": 4
+      },
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "Primary professional use case for the page and surrounding section."
+    },
+    {
+      "id": "T05",
+      "task_statement": "Understand patient privacy rights",
+      "user_intent_category": "Rights",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Notice and Other Individual Rights",
+          "note": "Explains access, correction, and complaint rights"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 5,
+        "findability": 3,
+        "completability": 4
+      },
+      "composite_score": 4.0,
+      "classification": "top",
+      "rationale": "Core public-facing user need with direct personal consequences."
+    },
+    {
+      "id": "T06",
+      "task_statement": "Find HIPAA enforcement penalties",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Enforcement and Penalties for Noncompliance",
+          "note": "Explains OCR enforcement responsibilities and penalties"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 5,
+        "findability": 3,
+        "completability": 4
+      },
+      "composite_score": 4.0,
+      "classification": "secondary",
+      "rationale": "Important for risk assessment and compliance planning, though less frequent than foundational tasks."
+    },
+    {
+      "id": "T07",
+      "task_statement": "Access official HIPAA regulation text",
+      "user_intent_category": "Reference",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/index.html",
+          "element": "Combined regulation text link",
+          "note": "Provides access to CFR regulation text"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 4,
+        "findability": 5,
+        "completability": 5
+      },
+      "composite_score": 4.5,
+      "classification": "top",
+      "rationale": "High-value task for legal, compliance, and operational users seeking authoritative references."
+    },
+    {
+      "id": "T08",
+      "task_statement": "Understand minimum necessary requirements",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Limiting Uses and Disclosures to the Minimum Necessary",
+          "note": "Explains disclosure limitation standards"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 5,
+        "findability": 3,
+        "completability": 3
+      },
+      "composite_score": 3.75,
+      "classification": "secondary",
+      "rationale": "Frequently misunderstood operational requirement with moderate discoverability."
+    },
+    {
+      "id": "T09",
+      "task_statement": "Learn business associate responsibilities",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Business Associates",
+          "note": "Explains responsibilities and relationships"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 5,
+        "findability": 3,
+        "completability": 4
+      },
+      "composite_score": 4.0,
+      "classification": "secondary",
+      "rationale": "Important for vendors and healthcare organizations managing third-party relationships."
+    },
+    {
+      "id": "T10",
+      "task_statement": "Find guidance on public health disclosures",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Public Health Activities",
+          "note": "Details allowed public health disclosures"
+        }
+      ],
+      "scores": {
+        "frequency": 3,
+        "impact": 5,
+        "findability": 3,
+        "completability": 3
+      },
+      "composite_score": 3.5,
+      "classification": "secondary",
+      "rationale": "Specialized but high-impact use case for providers and agencies."
+    },
+    {
+      "id": "T11",
+      "task_statement": "Review HIPAA rule updates and history",
+      "user_intent_category": "Research",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/index.html",
+          "element": "Privacy Rule History",
+          "note": "Lists proposed and final rule updates"
+        }
+      ],
+      "scores": {
+        "frequency": 3,
+        "impact": 4,
+        "findability": 4,
+        "completability": 5
+      },
+      "composite_score": 4.0,
+      "classification": "secondary",
+      "rationale": "Important for compliance monitoring and policy teams."
+    },
+    {
+      "id": "T12",
+      "task_statement": "Find notice of privacy practices requirements",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Privacy Practices Notice",
+          "note": "Explains notice requirements and obligations"
+        }
+      ],
+      "scores": {
+        "frequency": 3,
+        "impact": 4,
+        "findability": 3,
+        "completability": 4
+      },
+      "composite_score": 3.5,
+      "classification": "secondary",
+      "rationale": "Common operational task but narrower audience than broader compliance questions."
+    },
+    {
+      "id": "T13",
+      "task_statement": "Find HIPAA FAQs for professionals",
+      "user_intent_category": "Support",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/index.html",
+          "element": "Frequently Asked Questions for Professionals",
+          "note": "Supplemental guidance and clarifications"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 3,
+        "findability": 5,
+        "completability": 5
+      },
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "Likely high-frequency support behavior for users needing fast clarification."
+    },
+    {
+      "id": "T14",
+      "task_statement": "Learn about incidental disclosures",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "Incidental Use and Disclosure",
+          "note": "Explains incidental disclosure allowances"
+        }
+      ],
+      "scores": {
+        "frequency": 2,
+        "impact": 4,
+        "findability": 2,
+        "completability": 3
+      },
+      "composite_score": 2.75,
+      "classification": "tiny",
+      "rationale": "Important niche topic but lower overall demand and discoverability."
+    },
+    {
+      "id": "T15",
+      "task_statement": "Understand state law interactions with HIPAA",
+      "user_intent_category": "Legal",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "State Law",
+          "note": "Addresses preemption and state interaction"
+        }
+      ],
+      "scores": {
+        "frequency": 2,
+        "impact": 5,
+        "findability": 2,
+        "completability": 3
+      },
+      "composite_score": 3.0,
+      "classification": "tiny",
+      "rationale": "High complexity legal topic with narrower specialized audience."
+    },
+    {
+      "id": "T16",
+      "task_statement": "Find HIPAA security rule information",
+      "user_intent_category": "Compliance",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/security/index.html",
+          "element": "Security Rule",
+          "note": "Linked related administrative simplification rule"
+        }
+      ],
+      "scores": {
+        "frequency": 4,
+        "impact": 5,
+        "findability": 4,
+        "completability": 4
+      },
+      "composite_score": 4.25,
+      "classification": "top",
+      "rationale": "Strong adjacent user intent frequently paired with privacy compliance research."
+    },
+    {
+      "id": "T17",
+      "task_statement": "Learn how OCR enforces HIPAA",
+      "user_intent_category": "Enforcement",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html",
+          "element": "OCR enforcement references",
+          "note": "Explains HHS OCR role in investigations and compliance reviews"
+        }
+      ],
+      "scores": {
+        "frequency": 3,
+        "impact": 4,
+        "findability": 3,
+        "completability": 4
+      },
+      "composite_score": 3.5,
+      "classification": "secondary",
+      "rationale": "Important supporting task for compliance officers and regulated entities."
+    },
+    {
+      "id": "T18",
+      "task_statement": "Research historical HIPAA rulemaking notices",
+      "user_intent_category": "Research",
+      "evidence": [
+        {
+          "source_url": "https://www.hhs.gov/hipaa/for-professionals/privacy/index.html",
+          "element": "Historical notices and proposed rules",
+          "note": "Archive of rulemaking actions dating to 2000"
+        }
+      ],
+      "scores": {
+        "frequency": 1,
+        "impact": 3,
+        "findability": 4,
+        "completability": 5
+      },
+      "composite_score": 3.25,
+      "classification": "tiny",
+      "rationale": "Useful mainly for policy researchers and legal analysts."
+    }
+  ],
+  "top_tasks": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T07",
+    "T13",
+    "T16"
+  ],
+  "tiny_tasks": [
+    "T14",
+    "T15",
+    "T18"
+  ],
+  "recommended_survey": {
+    "instructions": "Select the five tasks that matter most to you when visiting this HIPAA Privacy Rule section. Then rank those five tasks from most important to least important. Use plain-language task statements only. Randomize order for each participant.",
+    "task_list_for_voting": [
+      "Understand what HIPAA protects",
+      "Determine if HIPAA applies to me",
+      "Learn permitted PHI disclosures",
+      "Find HIPAA privacy rule requirements",
+      "Understand patient privacy rights",
+      "Find HIPAA enforcement penalties",
+      "Access official HIPAA regulation text",
+      "Understand minimum necessary requirements",
+      "Learn business associate responsibilities",
+      "Find guidance on public health disclosures",
+      "Review HIPAA rule updates and history",
+      "Find notice of privacy practices requirements",
+      "Find HIPAA FAQs for professionals",
+      "Learn about incidental disclosures",
+      "Understand state law interactions with HIPAA",
+      "Find HIPAA security rule information",
+      "Learn how OCR enforces HIPAA",
+      "Research historical HIPAA rulemaking notices"
+    ],
+    "recommended_sample_size": 300,
+    "target_segments": [
+      "Healthcare providers",
+      "Health plan administrators",
+      "Compliance officers",
+      "Business associates and vendors",
+      "Patients and caregivers",
+      "Legal and policy professionals"
+    ]
+  },
+  "next_steps": [
+    "Validate top tasks through quantitative task voting research",
+    "Analyze onsite search logs to compare inferred versus actual user intent",
+    "Map top tasks to current navigation and identify friction points",
+    "Conduct usability testing on top five tasks",
+    "Evaluate whether regulatory and legal content is too dense for general public audiences",
+    "Assess cross-linking between Privacy Rule, Security Rule, FAQs, and complaint pathways",
+    "Prioritize homepage and navigation changes that elevate validated top tasks",
+    "Measure completion success rates for compliance-oriented journeys"
+  ],
+  "summary": "The dominant user needs center on understanding HIPAA coverage, protected information, permitted disclosures, and core privacy rule requirements. Compliance-oriented tasks clearly outweigh archival or policy-history tasks. The strongest top tasks are practical and high-risk: determining whether HIPAA applies, understanding PHI handling rules, and accessing authoritative regulation text. FAQ access also appears highly valuable because users likely seek quick clarification over deep legal reading. Key risks include dense legal language, fragmented navigation between Privacy and Security Rules, and moderate discoverability for nuanced compliance topics like minimum necessary standards and incidental disclosures. Validation should focus on whether professionals and the public prioritize the same tasks, how users phrase these intents in plain language, and where users struggle to complete compliance-related journeys."
+}
